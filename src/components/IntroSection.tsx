@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScaleReveal from "./ScaleReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +12,6 @@ export default function IntroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const labelRef = useRef<HTMLParagraphElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -39,19 +39,6 @@ export default function IntroSection() {
           { opacity: 0, y: 60 },
           { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
           "-=0.3"
-        );
-      }
-
-      if (imageRef.current) {
-        tl.fromTo(
-          imageRef.current,
-          { clipPath: "inset(100% 0 0 0)" },
-          {
-            clipPath: "inset(0% 0 0 0)",
-            duration: 1.2,
-            ease: "power3.inOut",
-          },
-          "-=0.6"
         );
       }
     }, sectionRef);
@@ -95,10 +82,10 @@ export default function IntroSection() {
         </div>
 
         <div className="flex justify-end">
-          <div
-            ref={imageRef}
+          <ScaleReveal
             className="relative w-full max-w-[500px] aspect-[884/1440]"
-            style={{ clipPath: "inset(100% 0 0 0)" }}
+            stiffness={500}
+            threshold={0.4}
           >
             <Image
               src="/images/hero/fedor-portrait.png"
@@ -107,7 +94,7 @@ export default function IntroSection() {
               className="object-cover"
               sizes="(max-width: 768px) 100vw, 500px"
             />
-          </div>
+          </ScaleReveal>
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScaleReveal from "./ScaleReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,7 +12,6 @@ export default function VoteFedorSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const overlayTextRef = useRef<HTMLDivElement>(null);
-  const bgRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -34,20 +34,6 @@ export default function VoteFedorSection() {
             },
           }
         );
-      }
-
-      // Subtle parallax on background
-      if (bgRef.current && sectionRef.current) {
-        gsap.to(bgRef.current, {
-          yPercent: -8,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
       }
 
       // "What's the Big Galactic Idea?" overlay text
@@ -79,42 +65,37 @@ export default function VoteFedorSection() {
       className="relative w-full"
       style={{ minHeight: "100vh" }}
     >
-      {/* Golden sky/canyon background — the vivid warm image */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div
-          ref={bgRef}
-          className="absolute inset-0"
-          style={{ top: "-10%", bottom: "-10%" }}
-        >
-          <Image
-            src="/images/hero/hero-photo-3.webp"
-            alt="Golden canyon sky"
-            fill
-            className="object-cover"
-            sizes="100vw"
-          />
-        </div>
-      </div>
-
-      {/* Left canyon wall */}
-      <div className="absolute left-0 top-0 bottom-0 z-[1] pointer-events-none" style={{ width: "40%" }}>
+      {/* Canyon background with Scale Reveal */}
+      <ScaleReveal
+        className="absolute inset-0"
+        stiffness={400}
+        initialScale={0.9}
+        threshold={0.3}
+      >
         <Image
-          src="/images/hero/hero-photo-1.webp"
-          alt=""
+          src="/images/hero/canyon-wide.webp"
+          alt="Golden canyon sky"
           fill
-          className="object-cover object-right"
-          sizes="40vw"
+          className="object-cover"
+          sizes="100vw"
         />
-      </div>
+      </ScaleReveal>
 
-      {/* Right canyon wall */}
-      <div className="absolute right-0 top-0 bottom-0 z-[1] pointer-events-none" style={{ width: "40%" }}>
+      {/* Fedor standing in canyon — centered, emerging from bottom */}
+      <div
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 z-[2] pointer-events-none"
+        style={{
+          height: "75%",
+          width: "auto",
+          aspectRatio: "1559 / 1468",
+        }}
+      >
         <Image
-          src="/images/hero/hero-photo-2.webp"
-          alt=""
+          src="/images/hero/fedor-standing.png"
+          alt="Fedor standing in canyon"
           fill
-          className="object-cover object-left"
-          sizes="40vw"
+          className="object-contain object-bottom"
+          sizes="80vw"
         />
       </div>
 
@@ -144,7 +125,8 @@ export default function VoteFedorSection() {
       <div
         className="absolute bottom-0 left-0 right-0 z-[4]"
         style={{
-          background: "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%)",
+          background:
+            "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%)",
           padding: "var(--section-padding-y) var(--section-padding-x)",
           paddingTop: "clamp(160px, 20vw, 280px)",
         }}

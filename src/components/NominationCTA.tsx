@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import ScaleReveal from "./ScaleReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -11,25 +12,10 @@ export default function NominationCTA() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
-
-      // Parallax on background
-      if (imageRef.current) {
-        gsap.to(imageRef.current, {
-          yPercent: -10,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      }
 
       const tl = gsap.timeline({
         scrollTrigger: {
@@ -50,8 +36,8 @@ export default function NominationCTA() {
       if (buttonRef.current) {
         tl.fromTo(
           buttonRef.current,
-          { opacity: 0, y: 30, scale: 0.95 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+          { opacity: 0, y: 30 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
           "-=0.4"
         );
       }
@@ -63,16 +49,17 @@ export default function NominationCTA() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full flex flex-col items-center justify-center overflow-hidden"
+      className="relative w-full flex flex-col items-center justify-center"
       style={{ minHeight: "100vh" }}
     >
-      {/* Background landscape with parallax */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div
-          ref={imageRef}
-          className="absolute inset-0"
-          style={{ top: "-15%", bottom: "-15%" }}
-        >
+      {/* Background landscape with Scale Reveal — deeper scale for drama */}
+      <ScaleReveal
+        className="absolute inset-0"
+        initialScale={0.8}
+        stiffness={400}
+        threshold={0.3}
+      >
+        <div className="relative w-full h-full">
           <Image
             src="/images/misc/nomination-cta.png"
             alt="Cosmic landscape"
@@ -81,13 +68,16 @@ export default function NominationCTA() {
             sizes="100vw"
           />
         </div>
-        <div
-          className="absolute inset-0"
-          style={{
-            background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)",
-          }}
-        />
-      </div>
+      </ScaleReveal>
+
+      {/* Dark overlay */}
+      <div
+        className="absolute inset-0 z-[1]"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)",
+        }}
+      />
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">

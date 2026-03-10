@@ -4,15 +4,22 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, useInView } from "framer-motion";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const portraitRef = useRef<HTMLDivElement>(null);
-  const earthRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+
+  // Portrait entrance — vertical slide-up (not scale)
+  const portraitRef = useRef<HTMLDivElement>(null);
+  const portraitInView = useInView(portraitRef, { once: true, amount: 0.3 });
+
+  // Earth panorama scale reveal
+  const earthRef = useRef<HTMLDivElement>(null);
+  const earthInView = useInView(earthRef, { once: true, amount: 0.5 });
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -34,38 +41,10 @@ export default function HeroSection() {
         );
       }
 
-      // Portrait entrance — clipPath reveal from bottom
-      if (portraitRef.current) {
-        gsap.fromTo(
-          portraitRef.current,
-          { clipPath: "inset(100% 0 0 0)" },
-          {
-            clipPath: "inset(0% 0 0 0)",
-            duration: 1.4,
-            ease: "power3.inOut",
-            delay: 0.5,
-          }
-        );
-      }
-
-      // Earth parallax on scroll
-      if (earthRef.current && sectionRef.current) {
-        gsap.to(earthRef.current, {
-          yPercent: -15,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      }
-
-      // Text parallax — moves up slower than scroll
+      // Text parallax — moves up at 50% of scroll speed
       if (textRef.current && sectionRef.current) {
         gsap.to(textRef.current, {
-          yPercent: -30,
+          yPercent: -50,
           ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -128,16 +107,23 @@ export default function HeroSection() {
         A Creative Project by Fedor Sokolov
       </p>
 
-      {/* Fedor portrait — IN FRONT of text, centered, emerging from bottom */}
-      <div
+      {/* Fedor portrait — IN FRONT of text, slides up 80px (spring) */}
+      <motion.div
         ref={portraitRef}
         className="absolute left-1/2 -translate-x-1/2 z-[2]"
+        initial={{ y: 80 }}
+        animate={portraitInView ? { y: 0 } : { y: 80 }}
+        transition={{
+          type: "spring",
+          stiffness: 500,
+          damping: 60,
+          mass: 1,
+        }}
         style={{
           bottom: "clamp(120px, 12vw, 220px)",
           height: "clamp(380px, 55vw, 780px)",
           width: "auto",
           aspectRatio: "955 / 2674",
-          clipPath: "inset(100% 0 0 0)",
         }}
       >
         <Image
@@ -147,21 +133,33 @@ export default function HeroSection() {
           className="object-contain"
           priority
         />
-      </div>
+      </motion.div>
 
-      {/* Earth panorama at bottom */}
+      {/* Earth panorama with Scale Reveal — scale 0.9 → 1.0 */}
       <div
         ref={earthRef}
-        className="absolute bottom-0 left-0 w-full z-[3]"
+        className="absolute bottom-0 left-0 w-full z-[3] overflow-hidden"
         style={{ height: "clamp(180px, 22vw, 320px)" }}
       >
-        <Image
-          src="/images/hero/hero-bg-1.png"
-          alt="Earth from space"
-          fill
-          className="object-cover"
-          priority
-        />
+        <motion.div
+          className="w-full h-full"
+          initial={{ scale: 0.9 }}
+          animate={earthInView ? { scale: 1 } : { scale: 0.9 }}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 60,
+            mass: 1,
+          }}
+        >
+          <Image
+            src="/images/hero/hero-bg-1.png"
+            alt="Earth from space"
+            fill
+            className="object-cover"
+            priority
+          />
+        </motion.div>
       </div>
     </section>
   );
