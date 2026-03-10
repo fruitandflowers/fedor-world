@@ -1,107 +1,168 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const taglineRef = useRef<HTMLParagraphElement>(null);
+  const portraitRef = useRef<HTMLDivElement>(null);
+  const arrowRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Character-by-character reveal for the title
+      if (titleRef.current) {
+        const text = titleRef.current.innerText;
+        titleRef.current.innerHTML = "";
+        const chars = text.split("").map((char) => {
+          const span = document.createElement("span");
+          span.textContent = char === " " ? "\u00A0" : char;
+          span.style.display = "inline-block";
+          span.style.opacity = "0";
+          span.style.transform = "translateY(60px)";
+          titleRef.current!.appendChild(span);
+          return span;
+        });
+
+        gsap.to(chars, {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.03,
+          ease: "power3.out",
+          delay: 0.3,
+        });
+      }
+
+      // Tagline fade in
+      if (taglineRef.current) {
+        gsap.fromTo(
+          taglineRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.8, delay: 1.5, ease: "power2.out" }
+        );
+      }
+
+      // Portrait parallax on scroll
+      if (portraitRef.current && sectionRef.current) {
+        gsap.to(portraitRef.current, {
+          y: -80,
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      }
+
+      // Arrow pulse
+      if (arrowRef.current) {
+        gsap.fromTo(
+          arrowRef.current,
+          { opacity: 0 },
+          { opacity: 0.3, duration: 1.5, delay: 2.5, ease: "power2.out" }
+        );
+        gsap.to(arrowRef.current, {
+          y: 8,
+          repeat: -1,
+          yoyo: true,
+          duration: 1.5,
+          ease: "power1.inOut",
+          delay: 2.5,
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Background earth image */}
+    <section
+      ref={sectionRef}
+      className="portal-section flex flex-col items-center justify-center relative"
+      data-theme="dark"
+      style={{ background: "#0A0A0A" }}
+    >
+      {/* Background earth at very low opacity */}
       <div className="absolute inset-0 z-0">
         <Image
           src="/images/hero/hero-bg-1.png"
           alt=""
           fill
-          className="object-cover object-center opacity-15"
+          className="object-cover object-center"
+          style={{ opacity: 0.06 }}
           priority
         />
-        {/* Warm gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FFFAF5] via-[#FFFAF5]/80 to-[#FFFAF5]" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 py-16 md:py-24">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-          {/* Text content */}
-          <div className="flex-1 text-center lg:text-left">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-accent uppercase tracking-[0.3em] text-sm mb-6"
-              style={{ fontFamily: "var(--font-ui)" }}
-            >
-              Introducing
-            </motion.p>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.15 }}
-              className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px] leading-[0.95] font-bold tracking-tight mb-8"
-              style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
-            >
-              The First
-              <br />
-              <span className="text-accent">World</span>
-              <br />
-              President
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="text-body text-lg md:text-xl max-w-lg mx-auto lg:mx-0 mb-10 leading-relaxed"
-            >
-              Not a political campaign. A creative project exploring what it
-              means to lead with love, humor, and radical imagination.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"
-            >
-              <a
-                href="https://form.typeform.com/to/y2NrRDGp"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block bg-accent text-white px-8 py-4 rounded-[20px] text-lg font-semibold shadow-[0_4px_14px_rgba(171,19,87,0.35),0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_20px_rgba(171,19,87,0.45)] hover:scale-[1.02] transition-all duration-300"
-                style={{ fontFamily: "var(--font-ui)" }}
-              >
-                Nominate Your World
-              </a>
-              <a
-                href="#policies"
-                className="inline-block bg-foreground text-white px-8 py-4 rounded-[42px] text-lg font-semibold hover:bg-[#333] transition-all duration-300"
-                style={{ fontFamily: "var(--font-ui)" }}
-              >
-                Explore Policies
-              </a>
-            </motion.div>
-          </div>
-
-          {/* Portrait */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex-shrink-0 relative"
+      {/* Main content */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-center min-h-screen">
+        {/* Text — left-aligned on desktop, centered on mobile */}
+        <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left py-20 lg:py-0">
+          <h1
+            ref={titleRef}
+            className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px] xl:text-[110px] leading-[0.9] font-bold tracking-tight text-[#FAFAFA]"
+            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
           >
-            <div className="relative w-[300px] h-[360px] sm:w-[380px] sm:h-[440px] lg:w-[440px] lg:h-[520px]">
-              <Image
-                src="/images/hero/hero-element.png"
-                alt="Fedor Sokolov — The First World President"
-                fill
-                className="object-contain object-bottom drop-shadow-2xl"
-                priority
-              />
-            </div>
-            {/* Decorative glow behind portrait */}
-            <div className="absolute -inset-8 bg-accent/5 rounded-full blur-3xl -z-10" />
-          </motion.div>
+            THE FIRST WORLD PRESIDENT
+          </h1>
+
+          <p
+            ref={taglineRef}
+            className="mt-8 text-[13px] tracking-[0.3em] uppercase text-[#888] max-w-md"
+            style={{
+              fontFamily: "var(--font-ui)",
+              opacity: 0,
+            }}
+          >
+            Not a political campaign. A creative project.
+          </p>
         </div>
+
+        {/* Portrait — asymmetric, bleeding right on desktop */}
+        <div
+          ref={portraitRef}
+          className="relative flex-shrink-0 lg:absolute lg:right-[-40px] lg:bottom-0"
+        >
+          <div className="relative w-[280px] h-[380px] sm:w-[340px] sm:h-[460px] lg:w-[420px] lg:h-[560px] xl:w-[480px] xl:h-[640px]">
+            <Image
+              src="/images/hero/hero-element.png"
+              alt="Fedor Sokolov"
+              fill
+              className="object-contain object-bottom"
+              priority
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll hint — barely visible thin line + arrow */}
+      <div
+        ref={arrowRef}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        style={{ opacity: 0 }}
+      >
+        <div className="w-[1px] h-8 bg-white/20" />
+        <svg
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+          fill="none"
+          className="text-white/20"
+        >
+          <path
+            d="M1 4L6 9L11 4"
+            stroke="currentColor"
+            strokeWidth="1"
+          />
+        </svg>
       </div>
     </section>
   );

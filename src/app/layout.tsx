@@ -34,7 +34,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${playfair.variable} antialiased`}>
+      <body className={`${playfair.variable}`}>
         <Navigation />
         {children}
         <Footer />

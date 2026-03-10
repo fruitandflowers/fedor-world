@@ -1,71 +1,99 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function NominationCTA() {
   const sectionRef = useRef<HTMLElement>(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const line1Ref = useRef<HTMLSpanElement>(null);
+  const line2Ref = useRef<HTMLSpanElement>(null);
+  const buttonRef = useRef<HTMLAnchorElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (!sectionRef.current) return;
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 50%",
+        },
+      });
+
+      if (line1Ref.current) {
+        tl.fromTo(
+          line1Ref.current,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+        );
+      }
+
+      if (line2Ref.current) {
+        tl.fromTo(
+          line2Ref.current,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
+          "-=0.4"
+        );
+      }
+
+      if (buttonRef.current) {
+        tl.fromTo(
+          buttonRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          "-=0.2"
+        );
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <section ref={sectionRef} className="py-24 md:py-32 relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#FFFAF5] via-accent/5 to-[#FFFAF5]" />
-
-      <div className="relative z-10 max-w-3xl mx-auto px-6 text-center">
-        <motion.h2
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold mb-6"
+    <section
+      ref={sectionRef}
+      className="portal-section flex flex-col items-center justify-center px-6"
+      data-theme="light"
+      style={{ background: "#FFFAF5" }}
+    >
+      <div className="max-w-4xl mx-auto text-center">
+        <h2
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1]"
           style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
         >
-          Every World Counts.
-          <br />
-          <span className="text-accent">Add Yours.</span>
-        </motion.h2>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="text-body text-lg md:text-xl mb-10 leading-relaxed"
-        >
-          This isn&apos;t about voting for Fedor. It&apos;s about imagining the
-          world you&apos;d want to live in and adding your voice to the
-          conversation.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <a
-            href="https://form.typeform.com/to/y2NrRDGp"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-accent text-white px-10 py-5 rounded-[20px] text-xl font-semibold shadow-[0_4px_14px_rgba(171,19,87,0.35),0_1px_3px_rgba(0,0,0,0.1)] hover:shadow-[0_8px_28px_rgba(171,19,87,0.5)] hover:scale-[1.03] transition-all duration-300"
-            style={{ fontFamily: "var(--font-ui)" }}
+          <span
+            ref={line1Ref}
+            className="block text-[#1A1A1A]"
+            style={{ opacity: 0 }}
           >
-            Nominate Your World
-          </a>
-        </motion.div>
+            Every World Counts.
+          </span>
+          <span
+            ref={line2Ref}
+            className="block text-[#AB1357] mt-2"
+            style={{ opacity: 0 }}
+          >
+            Add Yours.
+          </span>
+        </h2>
 
-        {/* Decorative accent dots */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : {}}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="mt-12 flex justify-center gap-2"
+        <a
+          ref={buttonRef}
+          href="https://form.typeform.com/to/y2NrRDGp"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-block mt-16 bg-[#AB1357] text-white px-12 py-5 text-base tracking-[0.15em] uppercase font-medium hover:bg-[#8a0f46] transition-colors"
+          style={{
+            fontFamily: "var(--font-ui)",
+            opacity: 0,
+          }}
         >
-          {[...Array(5)].map((_, i) => (
-            <div
-              key={i}
-              className="w-1.5 h-1.5 rounded-full bg-accent/30"
-            />
-          ))}
-        </motion.div>
+          Nominate Your World
+        </a>
       </div>
     </section>
   );

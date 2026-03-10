@@ -6,6 +6,8 @@
   --body-text: #2D3748;
   --accent: #AB1357;
   --muted: #6B7280;
+  --dark-bg: #0A0A0A;
+  --parchment: #FFFAF5;
 }
 
 @theme inline {
@@ -14,45 +16,120 @@
   --color-body: var(--body-text);
   --color-accent: var(--accent);
   --color-muted: var(--muted);
+  --color-dark-bg: var(--dark-bg);
+  --color-parchment: var(--parchment);
   --font-display: var(--font-playfair);
   --font-body: Georgia, 'Times New Roman', Times, serif;
   --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-body);
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Smooth scrolling */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* GSAP handles scroll, not CSS */
 }
 
-/* Custom scrollbar for past-lives carousel */
-.carousel-scroll::-webkit-scrollbar {
-  height: 6px;
+body {
+  background: var(--dark-bg);
+  color: #FAFAFA;
+  font-family: var(--font-body);
+  overflow-x: hidden;
 }
 
-.carousel-scroll::-webkit-scrollbar-track {
-  background: transparent;
+/* Scroll snap container */
+.snap-container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
 }
 
-.carousel-scroll::-webkit-scrollbar-thumb {
-  background: #AB1357;
-  border-radius: 3px;
+/* Each portal section */
+.portal-section {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  position: relative;
+  overflow: hidden;
 }
 
-.carousel-scroll::-webkit-scrollbar-thumb:hover {
-  background: #8a0f46;
+/* Policy card hover */
+.policy-card {
+  position: relative;
+  overflow: hidden;
 }
 
-/* Policy card hover image zoom */
 .policy-card img {
-  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .policy-card:hover img {
-  transform: scale(1.05);
+  transform: scale(1.08);
+}
+
+.policy-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.policy-card:hover::after {
+  transform: scaleX(1);
+}
+
+/* Ghost navigation */
+.ghost-nav {
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Character reveal helper */
+.char-reveal span {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+/* Past lives gallery */
+.past-life-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.past-life-slide.active {
+  opacity: 1;
+}
+
+/* Hide scrollbar globally */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* Smooth transitions */
+a, button {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Philosophy quote word reveal */
+.word-reveal .word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(20px);
+  margin-right: 0.3em;
 }
