@@ -65,7 +65,7 @@ export default function VoteFedorSection() {
       className="relative w-full"
       style={{ minHeight: "100vh" }}
     >
-      {/* Canyon background with Scale Reveal */}
+      {/* Layer 1: Golden sky background with Scale Reveal */}
       <ScaleReveal
         className="absolute inset-0"
         stiffness={400}
@@ -73,7 +73,7 @@ export default function VoteFedorSection() {
         threshold={0.3}
       >
         <Image
-          src="/images/hero/canyon-wide.webp"
+          src="/images/hero/hero-photo-3.webp"
           alt="Golden canyon sky"
           fill
           className="object-cover"
@@ -81,21 +81,31 @@ export default function VoteFedorSection() {
         />
       </ScaleReveal>
 
-      {/* Fedor standing in canyon — centered, emerging from bottom */}
+      {/* Layer 2: Left canyon rock wall — positioned left, object-fit covers from right edge */}
       <div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 z-[2] pointer-events-none"
-        style={{
-          height: "75%",
-          width: "auto",
-          aspectRatio: "1559 / 1468",
-        }}
+        className="absolute left-0 top-0 bottom-0 z-[1] pointer-events-none"
+        style={{ width: "45%" }}
       >
         <Image
-          src="/images/hero/fedor-standing.png"
-          alt="Fedor standing in canyon"
+          src="/images/hero/hero-photo-1.webp"
+          alt=""
           fill
-          className="object-contain object-bottom"
-          sizes="80vw"
+          className="object-cover object-right"
+          sizes="45vw"
+        />
+      </div>
+
+      {/* Layer 3: Right canyon rock wall — positioned right, object-fit covers from left edge */}
+      <div
+        className="absolute right-0 top-0 bottom-0 z-[1] pointer-events-none"
+        style={{ width: "45%" }}
+      >
+        <Image
+          src="/images/hero/hero-photo-2.webp"
+          alt=""
+          fill
+          className="object-cover object-left"
+          sizes="45vw"
         />
       </div>
 
