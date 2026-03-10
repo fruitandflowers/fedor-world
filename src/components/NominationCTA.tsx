@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -8,44 +9,50 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function NominationCTA() {
   const sectionRef = useRef<HTMLElement>(null);
-  const line1Ref = useRef<HTMLSpanElement>(null);
-  const line2Ref = useRef<HTMLSpanElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const buttonRef = useRef<HTMLAnchorElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
+      // Parallax on background
+      if (imageRef.current) {
+        gsap.to(imageRef.current, {
+          yPercent: -10,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: sectionRef.current,
-          start: "top 50%",
+          start: "top 60%",
+          toggleActions: "play none none none",
         },
       });
 
-      if (line1Ref.current) {
+      if (headingRef.current) {
         tl.fromTo(
-          line1Ref.current,
-          { opacity: 0, y: 40 },
+          headingRef.current,
+          { opacity: 0, y: 60 },
           { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
-        );
-      }
-
-      if (line2Ref.current) {
-        tl.fromTo(
-          line2Ref.current,
-          { opacity: 0, y: 40 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-          "-=0.4"
         );
       }
 
       if (buttonRef.current) {
         tl.fromTo(
           buttonRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
-          "-=0.2"
+          { opacity: 0, y: 30, scale: 0.95 },
+          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
+          "-=0.4"
         );
       }
     }, sectionRef);
@@ -56,29 +63,45 @@ export default function NominationCTA() {
   return (
     <section
       ref={sectionRef}
-      className="portal-section flex flex-col items-center justify-center px-6"
-      data-theme="light"
-      style={{ background: "#FFFAF5" }}
+      className="relative w-full flex flex-col items-center justify-center overflow-hidden"
+      style={{ minHeight: "100vh" }}
     >
-      <div className="max-w-4xl mx-auto text-center">
-        <h2
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1]"
-          style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+      {/* Background landscape with parallax */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div
+          ref={imageRef}
+          className="absolute inset-0"
+          style={{ top: "-15%", bottom: "-15%" }}
         >
-          <span
-            ref={line1Ref}
-            className="block text-[#1A1A1A]"
-            style={{ opacity: 0 }}
-          >
-            Every World Counts.
-          </span>
-          <span
-            ref={line2Ref}
-            className="block text-[#AB1357] mt-2"
-            style={{ opacity: 0 }}
-          >
-            Add Yours.
-          </span>
+          <Image
+            src="/images/misc/nomination-cta.png"
+            alt="Cosmic landscape"
+            fill
+            className="object-cover"
+            sizes="100vw"
+          />
+        </div>
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)",
+          }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <h2
+          ref={headingRef}
+          className="text-display text-white mb-16"
+          style={{
+            fontSize: "var(--text-display-lg)",
+            opacity: 0,
+          }}
+        >
+          Every World Counts.
+          <br />
+          Add Yours.
         </h2>
 
         <a
@@ -86,10 +109,18 @@ export default function NominationCTA() {
           href="https://form.typeform.com/to/y2NrRDGp"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-block mt-16 bg-[#AB1357] text-white px-12 py-5 text-base tracking-[0.15em] uppercase font-medium hover:bg-[#8a0f46] transition-colors"
+          className="inline-flex items-center justify-center text-white no-underline hover:brightness-110 hover:scale-[1.02]"
           style={{
-            fontFamily: "var(--font-ui)",
+            width: "clamp(280px, 45vw, 700px)",
+            height: "clamp(72px, 10vw, 160px)",
+            background: "var(--color-accent-pink)",
+            borderRadius: "10px",
+            fontFamily: "var(--font-body-stack)",
+            fontSize: "clamp(16px, 2.2vw, 26px)",
+            fontWeight: 700,
+            letterSpacing: "-0.3px",
             opacity: 0,
+            transition: "transform 0.4s var(--ease-out), filter 0.4s ease",
           }}
         >
           Nominate Your World

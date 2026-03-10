@@ -18,15 +18,16 @@ export default function SpotifySection() {
       if (titleRef.current) {
         gsap.fromTo(
           titleRef.current,
-          { opacity: 0, y: 30 },
+          { opacity: 0, y: 40 },
           {
             opacity: 1,
             y: 0,
             duration: 0.8,
-            ease: "power2.out",
+            ease: "power3.out",
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: "top 60%",
+              start: "top 70%",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -41,10 +42,11 @@ export default function SpotifySection() {
             y: 0,
             duration: 0.8,
             delay: 0.2,
-            ease: "power2.out",
+            ease: "power3.out",
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: "top 50%",
+              start: "top 60%",
+              toggleActions: "play none none none",
             },
           }
         );
@@ -57,20 +59,23 @@ export default function SpotifySection() {
   return (
     <section
       ref={sectionRef}
-      className="portal-section flex flex-col items-center justify-center px-6"
-      data-theme="dark"
-      style={{ background: "#0A0A0A" }}
+      style={{
+        backgroundColor: "var(--color-section-burgundy)",
+        padding: "var(--section-padding-y) var(--section-padding-x)",
+      }}
     >
-      <div className="max-w-2xl mx-auto w-full text-center">
+      <div className="max-w-3xl mx-auto w-full text-center">
         <h2
           ref={titleRef}
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#FAFAFA] mb-12"
+          className="text-display"
           style={{
-            fontFamily: "var(--font-playfair), Georgia, serif",
+            fontSize: "clamp(48px, 7vw, 88px)",
+            color: "var(--color-hero-text)",
+            marginBottom: "clamp(40px, 5vw, 64px)",
             opacity: 0,
           }}
         >
-          Jam With Your President
+          Presidential radio station
         </h2>
 
         <div ref={embedRef} style={{ opacity: 0 }}>
@@ -81,6 +86,7 @@ export default function SpotifySection() {
             allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
             loading="lazy"
             className="border-0"
+            style={{ borderRadius: "12px" }}
             title="Fedor's World President Playlist"
           />
         </div>

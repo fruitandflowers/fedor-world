@@ -2,34 +2,22 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
-const navLinks = [
-  { href: "/policies/ourcabulary", label: "Ourcabulary" },
-  { href: "/policies/pyramid", label: "Pyramid" },
+const menuLinks = [
+  { href: "/", label: "Home" },
+  { href: "https://relevant.ws/fedor", label: "Support Fedor", external: true },
   { href: "https://instagram.com/fedor.president", label: "Instagram", external: true },
-  { href: "https://form.typeform.com/to/y2NrRDGp", label: "Nominate", external: true },
+  { href: "https://tiktok.com/@fedor.president", label: "TikTok", external: true },
+  { href: "https://youtube.com/@fedor.president", label: "Youtube", external: true },
 ];
 
 export default function Navigation() {
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
-  const [isDark, setIsDark] = useState(true);
 
   const handleScroll = useCallback(() => {
-    const y = window.scrollY;
-    setScrolled(y > 60);
-    setHidden(y > 200);
-
-    // Detect which section we're over to set text color
-    const sections = document.querySelectorAll(".portal-section");
-    sections.forEach((section) => {
-      const rect = section.getBoundingClientRect();
-      if (rect.top <= 80 && rect.bottom > 80) {
-        const bg = section.getAttribute("data-theme");
-        setIsDark(bg === "dark");
-      }
-    });
+    setScrolled(window.scrollY > 100);
   }, []);
 
   useEffect(() => {
@@ -37,120 +25,92 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // Handle scroll up to show nav
+  // Lock body scroll when menu is open
   useEffect(() => {
-    let lastY = window.scrollY;
-    const onScroll = () => {
-      const y = window.scrollY;
-      if (y < lastY - 5) {
-        setHidden(false);
-      } else if (y > lastY + 5 && y > 200) {
-        setHidden(true);
-      }
-      lastY = y;
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  const textColor = isDark ? "text-white" : "text-[#1A1A1A]";
-  const mutedColor = isDark ? "text-white/50" : "text-[#1A1A1A]/50";
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
 
   return (
-    <nav
-      className={`ghost-nav fixed top-0 left-0 right-0 z-50 ${
-        hidden ? "opacity-0 pointer-events-none" : scrolled ? "opacity-70 hover:opacity-100" : "opacity-100"
-      }`}
-      style={{
-        backgroundColor: scrolled
-          ? isDark
-            ? "rgba(10,10,10,0.5)"
-            : "rgba(255,250,245,0.5)"
-          : "transparent",
-        backdropFilter: scrolled ? "blur(8px)" : "none",
-      }}
-    >
-      <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+    <>
+      <nav
+        className="ghost-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between"
+        style={{
+          height: "var(--nav-height)",
+          padding: "0 var(--section-padding-x)",
+          backgroundColor: scrolled ? "rgba(0, 0, 0, 0.8)" : "transparent",
+          backdropFilter: scrolled ? "blur(20px)" : "none",
+        }}
+      >
         {/* Wordmark */}
         <Link
           href="/"
-          className={`text-sm tracking-[0.35em] uppercase ${textColor} hover:opacity-60`}
-          style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
+          className="text-display text-white hover:opacity-70"
+          style={{ fontSize: "32px", letterSpacing: "-0.06em", lineHeight: "64px" }}
         >
           FEDOR
         </Link>
 
-        {/* Desktop nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) =>
-            link.external ? (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`text-[11px] tracking-[0.2em] uppercase ${mutedColor} hover:opacity-100 transition-opacity`}
-                style={{ fontFamily: "var(--font-ui)" }}
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.label}
-                href={link.href}
-                className={`text-[11px] tracking-[0.2em] uppercase ${mutedColor} hover:opacity-100 transition-opacity`}
-                style={{ fontFamily: "var(--font-ui)" }}
-              >
-                {link.label}
-              </Link>
-            )
-          )}
-        </div>
-
-        {/* Mobile hamburger */}
+        {/* Hamburger */}
         <button
-          className="md:hidden flex flex-col gap-1.5 p-2"
-          onClick={() => setMobileOpen(!mobileOpen)}
-          aria-label="Toggle menu"
+          onClick={() => setMenuOpen(true)}
+          className="p-2 cursor-pointer"
+          aria-label="Open menu"
+          style={{ background: "none", border: "none" }}
         >
-          <span
-            className={`block w-5 h-[1px] transition-all duration-300 ${
-              isDark ? "bg-white" : "bg-[#1A1A1A]"
-            } ${mobileOpen ? "rotate-45 translate-y-[7px]" : ""}`}
-          />
-          <span
-            className={`block w-5 h-[1px] transition-all duration-300 ${
-              isDark ? "bg-white" : "bg-[#1A1A1A]"
-            } ${mobileOpen ? "opacity-0" : ""}`}
-          />
-          <span
-            className={`block w-5 h-[1px] transition-all duration-300 ${
-              isDark ? "bg-white" : "bg-[#1A1A1A]"
-            } ${mobileOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
-          />
+          <div className="flex flex-col gap-[6px]">
+            {[0, 1, 2].map((i) => (
+              <div
+                key={i}
+                style={{
+                  width: "24px",
+                  height: "2px",
+                  backgroundColor: "rgb(153, 153, 153)",
+                }}
+              />
+            ))}
+          </div>
         </button>
-      </div>
+      </nav>
 
-      {/* Mobile menu */}
-      {mobileOpen && (
-        <div
-          className="md:hidden"
-          style={{
-            backgroundColor: isDark ? "rgba(10,10,10,0.95)" : "rgba(255,250,245,0.95)",
-            backdropFilter: "blur(12px)",
-          }}
-        >
-          <div className="px-6 py-8 flex flex-col gap-5">
-            {navLinks.map((link) =>
-              link.external ? (
+      {/* Full-screen menu overlay */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-8"
+            style={{ backgroundColor: "rgba(0, 0, 0, 0.95)" }}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setMenuOpen(false)}
+              className="absolute top-6 right-8 text-white text-3xl cursor-pointer hover:opacity-70"
+              style={{ background: "none", border: "none" }}
+              aria-label="Close menu"
+            >
+              &times;
+            </button>
+
+            {menuLinks.map((link) => {
+              const className = "text-display text-white hover:opacity-70";
+              const style = { fontSize: "clamp(32px, 5vw, 48px)" };
+
+              return link.external ? (
                 <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`text-sm tracking-[0.2em] uppercase ${mutedColor} hover:opacity-100`}
-                  style={{ fontFamily: "var(--font-ui)" }}
-                  onClick={() => setMobileOpen(false)}
+                  className={className}
+                  style={style}
+                  onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
                 </a>
@@ -158,17 +118,17 @@ export default function Navigation() {
                 <Link
                   key={link.label}
                   href={link.href}
-                  className={`text-sm tracking-[0.2em] uppercase ${mutedColor} hover:opacity-100`}
-                  style={{ fontFamily: "var(--font-ui)" }}
-                  onClick={() => setMobileOpen(false)}
+                  className={className}
+                  style={style}
+                  onClick={() => setMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
-              )
-            )}
-          </div>
-        </div>
-      )}
-    </nav>
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

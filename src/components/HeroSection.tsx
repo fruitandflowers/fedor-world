@@ -9,84 +9,70 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const titleRef = useRef<HTMLHeadingElement>(null);
-  const taglineRef = useRef<HTMLParagraphElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
   const portraitRef = useRef<HTMLDivElement>(null);
-  const arrowRef = useRef<HTMLDivElement>(null);
+  const earthRef = useRef<HTMLDivElement>(null);
+  const subtitleRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Word-by-word reveal for the title (preserves natural line breaks)
-      if (titleRef.current) {
-        const text = titleRef.current.innerText;
-        titleRef.current.innerHTML = "";
-        const words = text.split(" ").map((word, i, arr) => {
-          const wordSpan = document.createElement("span");
-          wordSpan.style.display = "inline-block";
-          wordSpan.style.overflow = "hidden";
-          wordSpan.style.verticalAlign = "top";
-
-          const inner = document.createElement("span");
-          inner.textContent = word;
-          inner.style.display = "inline-block";
-          inner.style.opacity = "0";
-          inner.style.transform = "translateY(100%)";
-          wordSpan.appendChild(inner);
-
-          titleRef.current!.appendChild(wordSpan);
-          // Add a real space between words (not inside the span, so wrapping works)
-          if (i < arr.length - 1) {
-            titleRef.current!.appendChild(document.createTextNode(" "));
-          }
-          return inner;
-        });
-
-        gsap.to(words, {
-          opacity: 1,
-          y: 0,
-          duration: 0.8,
-          stagger: 0.12,
-          ease: "power3.out",
-          delay: 0.3,
-        });
-      }
-
-      // Tagline fade in
-      if (taglineRef.current) {
+      // Text entrance — fade up
+      if (textRef.current) {
         gsap.fromTo(
-          taglineRef.current,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 0.8, delay: 1.5, ease: "power2.out" }
+          textRef.current,
+          { opacity: 0, y: 40 },
+          { opacity: 1, y: 0, duration: 1.2, ease: "power3.out", delay: 0.3 }
         );
       }
 
-      // Portrait parallax on scroll
-      if (portraitRef.current && sectionRef.current) {
-        gsap.to(portraitRef.current, {
-          y: -80,
+      // Subtitle entrance
+      if (subtitleRef.current) {
+        gsap.fromTo(
+          subtitleRef.current,
+          { opacity: 0, y: 20 },
+          { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.8 }
+        );
+      }
+
+      // Portrait entrance — clipPath reveal from bottom
+      if (portraitRef.current) {
+        gsap.fromTo(
+          portraitRef.current,
+          { clipPath: "inset(100% 0 0 0)" },
+          {
+            clipPath: "inset(0% 0 0 0)",
+            duration: 1.4,
+            ease: "power3.inOut",
+            delay: 0.5,
+          }
+        );
+      }
+
+      // Earth parallax on scroll
+      if (earthRef.current && sectionRef.current) {
+        gsap.to(earthRef.current, {
+          yPercent: -15,
+          ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top top",
             end: "bottom top",
-            scrub: 1,
+            scrub: true,
           },
         });
       }
 
-      // Arrow pulse
-      if (arrowRef.current) {
-        gsap.fromTo(
-          arrowRef.current,
-          { opacity: 0 },
-          { opacity: 0.3, duration: 1.5, delay: 2.5, ease: "power2.out" }
-        );
-        gsap.to(arrowRef.current, {
-          y: 8,
-          repeat: -1,
-          yoyo: true,
-          duration: 1.5,
-          ease: "power1.inOut",
-          delay: 2.5,
+      // Text parallax — moves up slower than scroll
+      if (textRef.current && sectionRef.current) {
+        gsap.to(textRef.current, {
+          yPercent: -30,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
         });
       }
     }, sectionRef);
@@ -97,83 +83,85 @@ export default function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="portal-section flex flex-col items-center justify-center relative"
-      data-theme="dark"
-      style={{ background: "#0A0A0A" }}
+      className="relative w-full overflow-hidden"
+      style={{
+        height: "clamp(100vh, 1400px, 1400px)",
+        background: "var(--gradient-hero-bg)",
+      }}
     >
-      {/* Background earth at very low opacity */}
-      <div className="absolute inset-0 z-0">
+      {/* Massive display text — BEHIND the portrait */}
+      <div
+        ref={textRef}
+        className="absolute left-1/2 -translate-x-1/2 text-center z-[1] pointer-events-none"
+        style={{
+          top: "clamp(100px, 10vw, 160px)",
+          opacity: 0,
+        }}
+      >
+        <h1
+          className="text-display whitespace-nowrap"
+          style={{
+            fontSize: "var(--text-hero)",
+            color: "var(--color-hero-text)",
+            lineHeight: 0.9,
+            letterSpacing: "var(--ls-hero)",
+          }}
+        >
+          THE FIRST
+          <br />
+          WORLD
+          <br />
+          PRESIDENT
+        </h1>
+      </div>
+
+      {/* Subtitle — positioned below text */}
+      <p
+        ref={subtitleRef}
+        className="absolute left-1/2 -translate-x-1/2 text-center z-[1] pointer-events-none text-accent"
+        style={{
+          top: "clamp(420px, 42vw, 600px)",
+          color: "var(--color-text-muted)",
+          opacity: 0,
+        }}
+      >
+        A Creative Project by Fedor Sokolov
+      </p>
+
+      {/* Fedor portrait — IN FRONT of text, centered, emerging from bottom */}
+      <div
+        ref={portraitRef}
+        className="absolute left-1/2 -translate-x-1/2 z-[2]"
+        style={{
+          bottom: "clamp(120px, 12vw, 220px)",
+          height: "clamp(380px, 55vw, 780px)",
+          width: "auto",
+          aspectRatio: "955 / 2674",
+          clipPath: "inset(100% 0 0 0)",
+        }}
+      >
         <Image
-          src="/images/hero/hero-bg-1.png"
-          alt=""
+          src="/images/hero/hero-element.png"
+          alt="Fedor Sokolov"
           fill
-          className="object-cover object-center"
-          style={{ opacity: 0.06 }}
+          className="object-contain"
           priority
         />
       </div>
 
-      {/* Main content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-center min-h-screen">
-        {/* Text — left-aligned on desktop, centered on mobile */}
-        <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left py-20 lg:py-0 lg:max-w-[60%]">
-          <h1
-            ref={titleRef}
-            className="text-[clamp(3rem,8vw,7.5rem)] leading-[0.88] font-bold tracking-[-0.02em] text-[#FAFAFA]"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
-          >
-            THE FIRST WORLD PRESIDENT
-          </h1>
-
-          <p
-            ref={taglineRef}
-            className="mt-8 text-[13px] tracking-[0.3em] uppercase text-[#888] max-w-md"
-            style={{
-              fontFamily: "var(--font-ui)",
-              opacity: 0,
-            }}
-          >
-            Not a political campaign. A creative project.
-          </p>
-        </div>
-
-        {/* Portrait — asymmetric, bleeding right on desktop */}
-        <div
-          ref={portraitRef}
-          className="relative flex-shrink-0 lg:absolute lg:right-[-40px] lg:bottom-0"
-        >
-          <div className="relative w-[280px] h-[380px] sm:w-[340px] sm:h-[460px] lg:w-[420px] lg:h-[560px] xl:w-[480px] xl:h-[640px]">
-            <Image
-              src="/images/hero/hero-element.png"
-              alt="Fedor Sokolov"
-              fill
-              className="object-contain object-bottom"
-              priority
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* Scroll hint — barely visible thin line + arrow */}
+      {/* Earth panorama at bottom */}
       <div
-        ref={arrowRef}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        style={{ opacity: 0 }}
+        ref={earthRef}
+        className="absolute bottom-0 left-0 w-full z-[3]"
+        style={{ height: "clamp(180px, 22vw, 320px)" }}
       >
-        <div className="w-[1px] h-8 bg-white/20" />
-        <svg
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-          fill="none"
-          className="text-white/20"
-        >
-          <path
-            d="M1 4L6 9L11 4"
-            stroke="currentColor"
-            strokeWidth="1"
-          />
-        </svg>
+        <Image
+          src="/images/hero/hero-bg-1.png"
+          alt="Earth from space"
+          fill
+          className="object-cover"
+          priority
+        />
       </div>
     </section>
   );
