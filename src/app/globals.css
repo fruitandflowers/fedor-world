@@ -3,7 +3,7 @@
 :root {
   /* === FONTS === */
   --font-display-stack: var(--font-display), 'Bodoni Moda', 'Cormorant Garamond', 'Times New Roman', serif;
-  --font-body-stack: var(--font-body), 'DM Sans', -apple-system, sans-serif;
+  --font-body-stack: var(--font-body), 'Neue Montreal', 'DM Sans', -apple-system, sans-serif;
   --font-accent-stack: var(--font-accent), 'Montserrat Alternates', sans-serif;
 
   /* === COLORS === */

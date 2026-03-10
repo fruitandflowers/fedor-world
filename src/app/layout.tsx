@@ -1,30 +1,33 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, DM_Sans, Montserrat_Alternates } from "next/font/google";
+import localFont from "next/font/local";
+import { Montserrat_Alternates } from "next/font/google";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import SmoothScroll from "@/components/SmoothScroll";
 import "lenis/dist/lenis.css";
 import "./globals.css";
 
-const bodoni = Bodoni_Moda({
+const gaqire = localFont({
+  src: "../../public/fonts/GAQIRE-Regular.otf",
   variable: "--font-display",
-  subsets: ["latin"],
   display: "swap",
-  axes: ["opsz"],
 });
 
-const dmSans = DM_Sans({
+const neueMontreal = localFont({
+  src: [
+    { path: "../../public/fonts/NeueMontreal-Light.otf", weight: "300" },
+    { path: "../../public/fonts/NeueMontreal-Regular.otf", weight: "400" },
+    { path: "../../public/fonts/NeueMontreal-Bold.otf", weight: "700" },
+  ],
   variable: "--font-body",
-  subsets: ["latin"],
   display: "swap",
-  weight: ["300", "400", "500", "600", "700"],
 });
 
 const montserratAlt = Montserrat_Alternates({
   variable: "--font-accent",
   subsets: ["latin"],
   display: "swap",
-  weight: ["400", "500", "600"],
+  weight: ["300"],
 });
 
 export const metadata: Metadata = {
@@ -50,7 +53,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${bodoni.variable} ${dmSans.variable} ${montserratAlt.variable}`}>
+      <body className={`${gaqire.variable} ${neueMontreal.variable} ${montserratAlt.variable}`}>
         <SmoothScroll>
           <Navigation />
           {children}
