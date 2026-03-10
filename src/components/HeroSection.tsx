@@ -16,25 +16,36 @@ export default function HeroSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Character-by-character reveal for the title
+      // Word-by-word reveal for the title (preserves natural line breaks)
       if (titleRef.current) {
         const text = titleRef.current.innerText;
         titleRef.current.innerHTML = "";
-        const chars = text.split("").map((char) => {
-          const span = document.createElement("span");
-          span.textContent = char === " " ? "\u00A0" : char;
-          span.style.display = "inline-block";
-          span.style.opacity = "0";
-          span.style.transform = "translateY(60px)";
-          titleRef.current!.appendChild(span);
-          return span;
+        const words = text.split(" ").map((word, i, arr) => {
+          const wordSpan = document.createElement("span");
+          wordSpan.style.display = "inline-block";
+          wordSpan.style.overflow = "hidden";
+          wordSpan.style.verticalAlign = "top";
+
+          const inner = document.createElement("span");
+          inner.textContent = word;
+          inner.style.display = "inline-block";
+          inner.style.opacity = "0";
+          inner.style.transform = "translateY(100%)";
+          wordSpan.appendChild(inner);
+
+          titleRef.current!.appendChild(wordSpan);
+          // Add a real space between words (not inside the span, so wrapping works)
+          if (i < arr.length - 1) {
+            titleRef.current!.appendChild(document.createTextNode(" "));
+          }
+          return inner;
         });
 
-        gsap.to(chars, {
+        gsap.to(words, {
           opacity: 1,
           y: 0,
-          duration: 0.6,
-          stagger: 0.03,
+          duration: 0.8,
+          stagger: 0.12,
           ease: "power3.out",
           delay: 0.3,
         });
@@ -105,10 +116,10 @@ export default function HeroSection() {
       {/* Main content */}
       <div className="relative z-10 w-full max-w-7xl mx-auto px-6 flex flex-col lg:flex-row items-center justify-center min-h-screen">
         {/* Text — left-aligned on desktop, centered on mobile */}
-        <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left py-20 lg:py-0">
+        <div className="flex-1 flex flex-col justify-center items-center lg:items-start text-center lg:text-left py-20 lg:py-0 lg:max-w-[60%]">
           <h1
             ref={titleRef}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-[90px] xl:text-[110px] leading-[0.9] font-bold tracking-tight text-[#FAFAFA]"
+            className="text-[clamp(3rem,8vw,7.5rem)] leading-[0.88] font-bold tracking-[-0.02em] text-[#FAFAFA]"
             style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
           >
             THE FIRST WORLD PRESIDENT
