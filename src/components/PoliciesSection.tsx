@@ -18,19 +18,20 @@ export default function PoliciesSection() {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
+      // L→R emerge animation on scroll (matches original's subtle horizontal reveal)
       if (contentRef.current) {
         gsap.fromTo(
           contentRef.current,
-          { opacity: 0, y: 40 },
+          { opacity: 0, x: -60 },
           {
             opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
+            x: 0,
+            ease: "none",
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top 70%",
-              toggleActions: "play none none none",
+              end: "top 30%",
+              scrub: true,
             },
           }
         );
@@ -40,12 +41,12 @@ export default function PoliciesSection() {
         const cards = cardsRef.current.querySelectorAll(".policy-card");
         gsap.fromTo(
           cards,
-          { opacity: 0, y: 30 },
+          { opacity: 0, x: -40 },
           {
             opacity: 1,
-            y: 0,
+            x: 0,
             duration: 0.5,
-            stagger: 0.05,
+            stagger: 0.08,
             ease: "power3.out",
             scrollTrigger: {
               trigger: cardsRef.current,
@@ -76,11 +77,11 @@ export default function PoliciesSection() {
         style={{ height: "521px" }}
       >
         <div
-          className="flex flex-col items-center gap-[13px]"
+          className="flex flex-col items-center gap-[13px] text-center"
           style={{ width: "1277px", maxWidth: "100%" }}
         >
           <h2
-            className="text-display text-white w-full"
+            className="text-display text-white"
             style={{
               fontSize: "var(--text-display-xl)",
               letterSpacing: "-2px",
@@ -94,7 +95,6 @@ export default function PoliciesSection() {
           </h2>
 
           <p
-            className="w-full"
             style={{
               fontFamily: "var(--font-body-stack)",
               fontSize: "24px",
@@ -107,7 +107,7 @@ export default function PoliciesSection() {
             Calling All Beings to Craft Our Collective Future
           </p>
 
-          <div className="w-full" style={{ marginTop: "15px" }}>
+          <div style={{ marginTop: "15px" }}>
             <Link
               href="/policies"
               className="inline-flex items-center gap-3 text-white no-underline hover:brightness-110"
