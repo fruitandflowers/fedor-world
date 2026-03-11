@@ -4,7 +4,8 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ScaleReveal from "./ScaleReveal";
+import { motion, useInView } from "framer-motion";
+import ScaleReveal, { SPRING_FAST, SPRING_HEAVY } from "./ScaleReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -12,6 +13,12 @@ export default function VoteFedorSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const overlayTextRef = useRef<HTMLDivElement>(null);
+
+  // Rock wall horizontal slides — HEAVY spring (animation #3 from MainPage.mjs)
+  const leftRockRef = useRef<HTMLDivElement>(null);
+  const leftRockInView = useInView(leftRockRef, { once: true, amount: 0.3 });
+  const rightRockRef = useRef<HTMLDivElement>(null);
+  const rightRockInView = useInView(rightRockRef, { once: true, amount: 0.3 });
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -65,10 +72,10 @@ export default function VoteFedorSection() {
       className="relative w-full"
       style={{ minHeight: "100vh" }}
     >
-      {/* Layer 1: Golden sky background with Scale Reveal */}
+      {/* Layer 1: Golden sky background — DOMINANT, fills entire section */}
       <ScaleReveal
         className="absolute inset-0"
-        stiffness={400}
+        spring={SPRING_FAST}
         initialScale={0.9}
         threshold={0.3}
       >
@@ -78,35 +85,69 @@ export default function VoteFedorSection() {
           fill
           className="object-cover"
           sizes="100vw"
+          priority
         />
       </ScaleReveal>
 
-      {/* Layer 2: Left canyon rock wall — positioned left, object-fit covers from right edge */}
-      <div
+      {/* Layer 2: Left rock wall — narrow frame edge only (15% width) */}
+      <motion.div
+        ref={leftRockRef}
         className="absolute left-0 top-0 bottom-0 z-[1] pointer-events-none"
-        style={{ width: "45%" }}
+        style={{ width: "18%" }}
+        initial={{ x: -100 }}
+        animate={leftRockInView ? { x: 0 } : { x: -100 }}
+        transition={{
+          type: "spring",
+          stiffness: SPRING_HEAVY.stiffness,
+          damping: SPRING_HEAVY.damping,
+          mass: SPRING_HEAVY.mass,
+        }}
       >
         <Image
           src="/images/hero/hero-photo-1.webp"
           alt=""
           fill
           className="object-cover object-right"
-          sizes="45vw"
+          sizes="18vw"
         />
-      </div>
+      </motion.div>
 
-      {/* Layer 3: Right canyon rock wall — positioned right, object-fit covers from left edge */}
-      <div
+      {/* Layer 3: Right rock wall — narrow frame edge only (15% width) */}
+      <motion.div
+        ref={rightRockRef}
         className="absolute right-0 top-0 bottom-0 z-[1] pointer-events-none"
-        style={{ width: "45%" }}
+        style={{ width: "18%" }}
+        initial={{ x: 100 }}
+        animate={rightRockInView ? { x: 0 } : { x: 100 }}
+        transition={{
+          type: "spring",
+          stiffness: SPRING_HEAVY.stiffness,
+          damping: SPRING_HEAVY.damping,
+          mass: SPRING_HEAVY.mass,
+        }}
       >
         <Image
           src="/images/hero/hero-photo-2.webp"
           alt=""
           fill
           className="object-cover object-left"
-          sizes="45vw"
+          sizes="18vw"
         />
+      </motion.div>
+
+      {/* Layer 4: Fedor standing figure — centered */}
+      <div
+        className="absolute inset-0 z-[2] flex items-end justify-center pointer-events-none"
+      >
+        <div className="relative" style={{ width: "clamp(200px, 25vw, 400px)", height: "75%" }}>
+          <Image
+            src="/images/hero/fedor-standing.png"
+            alt="Fedor standing"
+            fill
+            className="object-contain object-bottom"
+            sizes="400px"
+          />
+        </div>
       </div>
 
       {/* Hashtag text */}
@@ -116,7 +157,6 @@ export default function VoteFedorSection() {
         style={{
           top: "15%",
           left: "var(--section-padding-x)",
-          opacity: 0,
         }}
       >
         <p
@@ -144,7 +184,6 @@ export default function VoteFedorSection() {
         <div
           ref={overlayTextRef}
           className="max-w-3xl mx-auto text-center"
-          style={{ opacity: 0 }}
         >
           <h2
             className="text-display text-white mb-8"

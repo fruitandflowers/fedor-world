@@ -58,7 +58,6 @@ export default function WorldsList() {
               padding: "clamp(16px, 1.5vw, 20px) clamp(20px, 3vw, 40px)",
               minHeight: "clamp(100px, 14vw, 180px)",
               borderRadius: "var(--radius-pill)",
-              opacity: 0,
             }}
           >
             {/* Thumbnail */}

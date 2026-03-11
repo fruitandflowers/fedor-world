@@ -80,7 +80,6 @@ export default function PoliciesSection() {
         style={{
           color: "var(--color-accent-magenta)",
           marginBottom: "32px",
-          opacity: 0,
         }}
       >
         Explore the Vision
@@ -95,7 +94,6 @@ export default function PoliciesSection() {
           letterSpacing: "-2px",
           lineHeight: 1.2,
           marginBottom: "32px",
-          opacity: 0,
         }}
       >
         Policies And Worlds
@@ -113,7 +111,6 @@ export default function PoliciesSection() {
           letterSpacing: "-0.5px",
           lineHeight: 1.5,
           marginBottom: "48px",
-          opacity: 0,
         }}
       >
         Calling All Beings to Craft Our Collective Future
@@ -132,7 +129,6 @@ export default function PoliciesSection() {
           fontSize: "var(--text-body-md)",
           fontWeight: 700,
           letterSpacing: "-0.3px",
-          opacity: 0,
         }}
       >
         All Policies & Worlds

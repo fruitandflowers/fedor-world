@@ -72,13 +72,12 @@ export default function SpotifySection() {
             fontSize: "clamp(48px, 7vw, 88px)",
             color: "var(--color-hero-text)",
             marginBottom: "clamp(40px, 5vw, 64px)",
-            opacity: 0,
           }}
         >
           Presidential radio station
         </h2>
 
-        <div ref={embedRef} style={{ opacity: 0 }}>
+        <div ref={embedRef}>
           <iframe
             src="https://open.spotify.com/embed/playlist/7BpT9kXGxvOxWlEjV23YHl?utm_source=generator&theme=0"
             width="100%"

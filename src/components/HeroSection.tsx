@@ -78,7 +78,7 @@ export default function HeroSection() {
         }}
       >
         <h1
-          className="text-display whitespace-nowrap"
+          className="text-display whitespace-nowrap text-gradient-fade"
           style={{
             fontSize: "var(--text-hero)",
             color: "var(--color-hero-text)",
@@ -115,7 +115,7 @@ export default function HeroSection() {
         animate={portraitInView ? { y: 0 } : { y: 80 }}
         transition={{
           type: "spring",
-          stiffness: 500,
+          stiffness: 600, // SPRING_NAV — portrait entrance (from MainPage.mjs #1)
           damping: 60,
           mass: 1,
         }}

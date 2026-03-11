@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ScaleReveal from "./ScaleReveal";
+import ScaleReveal, { SPRING_FAST } from "./ScaleReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,6 +52,7 @@ export default function IntroSection() {
       style={{
         backgroundColor: "#ffffff",
         padding: "var(--section-padding-y) var(--section-padding-x)",
+        minHeight: "1200px",
       }}
     >
       <div className="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
@@ -62,7 +63,6 @@ export default function IntroSection() {
             style={{
               color: "var(--color-accent-magenta)",
               marginBottom: "24px",
-              opacity: 0,
             }}
           >
             The Mission
@@ -74,7 +74,6 @@ export default function IntroSection() {
               fontSize: "clamp(40px, 5vw, 65px)",
               color: "rgb(7, 5, 66)",
               lineHeight: 0.95,
-              opacity: 0,
             }}
           >
             CREATING A NEW CHAPTER OF HUMAN EVOLUTION: ONE WORLD AT A TIME
@@ -83,8 +82,8 @@ export default function IntroSection() {
 
         <div className="flex justify-end">
           <ScaleReveal
-            className="relative w-full max-w-[500px] aspect-[884/1440]"
-            stiffness={500}
+            className="relative w-full aspect-[884/1440]"
+            spring={SPRING_FAST}
             threshold={0.4}
           >
             <Image
@@ -92,7 +91,7 @@ export default function IntroSection() {
               alt="Fedor at podium"
               fill
               className="object-cover"
-              sizes="(max-width: 768px) 100vw, 500px"
+              sizes="(max-width: 768px) 100vw, 50vw"
             />
           </ScaleReveal>
         </div>

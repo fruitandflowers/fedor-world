@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ScaleReveal from "./ScaleReveal";
+import ScaleReveal, { SPRING_STANDARD } from "./ScaleReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,11 +52,13 @@ export default function NominationCTA() {
       className="relative w-full flex flex-col items-center justify-center"
       style={{ minHeight: "100vh" }}
     >
-      {/* Background landscape with Scale Reveal — deeper scale for drama */}
+      {/* Background landscape with Scale Reveal — deeper scale + y slide (animation #9: scale 0.8→1.0, y:60→0, STANDARD) */}
       <ScaleReveal
         className="absolute inset-0"
         initialScale={0.8}
-        stiffness={400}
+        spring={SPRING_STANDARD}
+        initialExtra={{ y: 60 }}
+        finalExtra={{ y: 0 }}
         threshold={0.3}
       >
         <div className="relative w-full h-full">
@@ -86,7 +88,6 @@ export default function NominationCTA() {
           className="text-display text-white mb-16"
           style={{
             fontSize: "var(--text-display-lg)",
-            opacity: 0,
           }}
         >
           Every World Counts.
@@ -109,7 +110,6 @@ export default function NominationCTA() {
             fontSize: "clamp(16px, 2.2vw, 26px)",
             fontWeight: 700,
             letterSpacing: "-0.3px",
-            opacity: 0,
             transition: "transform 0.4s var(--ease-out), filter 0.4s ease",
           }}
         >
