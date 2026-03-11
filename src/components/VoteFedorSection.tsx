@@ -9,13 +9,72 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function VoteFedorSection() {
   const sectionRef = useRef<HTMLElement>(null);
+  const rightRockRef = useRef<HTMLDivElement>(null);
+  const leftRockRef = useRef<HTMLDivElement>(null);
+  const fedorRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
-      // Bottom overlay text reveal
+      // ROCK OPENING ANIMATION — rocks slide apart as user scrolls, revealing Fedor
+      // Right rock moves RIGHT
+      if (rightRockRef.current) {
+        gsap.fromTo(
+          rightRockRef.current,
+          { x: 0 },
+          {
+            x: 200,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              end: "center center",
+              scrub: true,
+            },
+          }
+        );
+      }
+
+      // Left rock moves LEFT
+      if (leftRockRef.current) {
+        gsap.fromTo(
+          leftRockRef.current,
+          { x: 0 },
+          {
+            x: -200,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              end: "center center",
+              scrub: true,
+            },
+          }
+        );
+      }
+
+      // Fedor scales up slightly as rocks open (emergence feeling)
+      if (fedorRef.current) {
+        gsap.fromTo(
+          fedorRef.current,
+          { scale: 0.85, opacity: 0.7 },
+          {
+            scale: 1,
+            opacity: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+              end: "center center",
+              scrub: true,
+            },
+          }
+        );
+      }
+
+      // Bottom text reveal
       if (textRef.current) {
         gsap.fromTo(
           textRef.current,
@@ -44,7 +103,7 @@ export default function VoteFedorSection() {
       className="relative w-full overflow-hidden"
       style={{ height: "1183px" }}
     >
-      {/* Layer 0: Golden sky background — fills entire section (Framer: backgroundImage, 1px width = fill) */}
+      {/* Layer 0: Golden sky background — fills entire section */}
       <div className="absolute inset-0">
         <Image
           src="/images/hero/hero-photo-3.webp"
@@ -58,6 +117,7 @@ export default function VoteFedorSection() {
 
       {/* Layer 1: Right rock wall — Framer: 2123px wide, right: -1446px, z-index 2 */}
       <div
+        ref={rightRockRef}
         className="absolute top-0 bottom-0 z-[2] pointer-events-none"
         style={{
           width: "2123px",
@@ -75,6 +135,7 @@ export default function VoteFedorSection() {
 
       {/* Layer 2: Left rock wall — Framer: 2478px wide, left: -1642px, z-index 2 */}
       <div
+        ref={leftRockRef}
         className="absolute top-0 bottom-0 z-[2] pointer-events-none"
         style={{
           width: "2478px",
@@ -90,8 +151,9 @@ export default function VoteFedorSection() {
         />
       </div>
 
-      {/* Layer 3: Fedor standing — Framer: 290x558px, centerX 49%, centerY 49%, z-index 1 */}
+      {/* Layer 3: Fedor standing — Framer: 290x558px, centered, z-index 1 */}
       <div
+        ref={fedorRef}
         className="absolute z-[1] pointer-events-none"
         style={{
           width: "290px",

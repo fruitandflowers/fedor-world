@@ -10,11 +10,13 @@ gsap.registerPlugin(ScrollTrigger);
 export default function IntroSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
+  const portraitRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
+      // Heading entrance
       if (headingRef.current) {
         gsap.fromTo(
           headingRef.current,
@@ -32,6 +34,34 @@ export default function IntroSection() {
           }
         );
       }
+
+      // COUNTER-SCROLL: Portrait drifts RIGHT as you scroll
+      if (portraitRef.current) {
+        gsap.to(portraitRef.current, {
+          x: 80,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+
+      // COUNTER-SCROLL: Heading drifts LEFT as you scroll
+      if (headingRef.current) {
+        gsap.to(headingRef.current, {
+          x: -60,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -44,11 +74,11 @@ export default function IntroSection() {
       style={{
         height: "1200px",
         backgroundColor: "hsl(0, 0%, 100%)",
-        padding: "40px",
       }}
     >
       {/* Portrait — Framer: 1244x1552px, absolute, centerX 79%, bottom -180px, z-index 1 */}
       <div
+        ref={portraitRef}
         className="absolute z-[1]"
         style={{
           width: "1244px",

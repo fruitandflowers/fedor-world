@@ -5,28 +5,59 @@ import Image from "next/image";
 import { pastLives } from "@/data/past-lives";
 
 export default function PastLivesCarousel() {
-  // Framer startFrom="4" appears to be 1-based, centering on item 4.
-  // With alignment="center" and 3 visible, this shows items 2,3,4 (indices in 0-based)
-  const [current, setCurrent] = useState(2);
-  const sectionRef = useRef<HTMLElement>(null);
-  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartX = useRef(0);
-  const dragCurrentX = useRef(0);
-
   const itemCount = pastLives.length;
   const visibleCount = 3;
   const gap = 32;
 
-  // Auto-play every 2.3s (from Framer: intervalControl="2.3")
+  // Start in the middle copy for seamless looping
+  const [current, setCurrent] = useState(itemCount + 2);
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(true);
+  const dragStartX = useRef(0);
+  const dragCurrentX = useRef(0);
+
+  // Triple the items for infinite loop: [...items, ...items, ...items]
+  const tripled = [...pastLives, ...pastLives, ...pastLives];
+
+  // When we reach the edges of the tripled array, silently jump to the middle copy
+  useEffect(() => {
+    if (!isTransitioning) return;
+    const timer = setTimeout(() => {
+      // If we've scrolled past the middle copy, jump back
+      if (current >= itemCount * 2) {
+        setIsTransitioning(false);
+        setCurrent(current - itemCount);
+      } else if (current < itemCount) {
+        setIsTransitioning(false);
+        setCurrent(current + itemCount);
+      }
+    }, 600); // Match transition duration
+    return () => clearTimeout(timer);
+  }, [current, itemCount, isTransitioning]);
+
+  // Re-enable transition after silent jump
+  useEffect(() => {
+    if (!isTransitioning) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setIsTransitioning(true);
+        });
+      });
+    }
+  }, [isTransitioning]);
+
+  // Auto-play every 2.3s
   useEffect(() => {
     intervalRef.current = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % itemCount);
+      setCurrent((prev) => prev + 1);
     }, 2300);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [itemCount]);
+  }, []);
 
   // Drag support
   const handleDragStart = useCallback((clientX: number) => {
@@ -46,19 +77,14 @@ export default function PastLivesCarousel() {
     setIsDragging(false);
     const diff = dragStartX.current - dragCurrentX.current;
     if (Math.abs(diff) > 50) {
-      setCurrent((prev) => {
-        if (diff > 0) return (prev + 1) % itemCount;
-        return (prev - 1 + itemCount) % itemCount;
-      });
+      setCurrent((prev) => diff > 0 ? prev + 1 : prev - 1);
     }
     // Restart autoplay
     intervalRef.current = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % itemCount);
+      setCurrent((prev) => prev + 1);
     }, 2300);
-  }, [isDragging, itemCount]);
+  }, [isDragging]);
 
-  // Each item takes 1/3 of container minus gaps
-  // Using calc() for responsive sizing
   const itemWidthCalc = `calc((100% - ${gap * (visibleCount - 1)}px) / ${visibleCount})`;
   const slideOffset = `calc(${current} * (calc((100% - ${gap * (visibleCount - 1)}px) / ${visibleCount}) + ${gap}px))`;
 
@@ -87,10 +113,10 @@ export default function PastLivesCarousel() {
         FUTURE PRESIDENT
       </h2>
 
-      {/* Spacer frames from Framer (186px + 256px = 442px before slideshow) */}
+      {/* Spacer */}
       <div style={{ height: "442px" }} />
 
-      {/* Slideshow — 800px height, 3 items, gap 32, auto-play */}
+      {/* Slideshow — 800px height, 3 items, gap 32, auto-play, INFINITE LOOP */}
       <div
         className="relative overflow-hidden"
         style={{ height: "800px" }}
@@ -103,17 +129,20 @@ export default function PastLivesCarousel() {
         onTouchEnd={handleDragEnd}
       >
         <div
+          ref={trackRef}
           className="flex h-full"
           style={{
             gap: `${gap}px`,
             transform: `translateX(calc(-1 * ${slideOffset}))`,
-            transition: isDragging ? "none" : "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
+            transition: isTransitioning && !isDragging
+              ? "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
+              : "none",
             cursor: isDragging ? "grabbing" : "grab",
           }}
         >
-          {pastLives.map((life) => (
+          {tripled.map((life, i) => (
             <div
-              key={life.year}
+              key={`${life.year}-${i}`}
               className="flex-shrink-0 h-full"
               style={{ width: itemWidthCalc }}
             >
@@ -125,7 +154,6 @@ export default function PastLivesCarousel() {
                   className="object-cover"
                   sizes="(max-width: 640px) 100vw, 33vw"
                 />
-                {/* Year label overlaid on image bottom */}
                 <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p
                     className="text-display"

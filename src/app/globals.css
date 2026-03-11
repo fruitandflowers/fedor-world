@@ -102,8 +102,9 @@ html {
 }
 
 /* Gradient text fade — used on hero title for ethereal effect */
+/* Original Framer: subtle silver-gray gradient, NOT pink. Fades from visible at bottom to invisible at top. */
 .text-gradient-fade {
-  background: linear-gradient(0deg, rgb(240, 199, 199) 60%, rgba(240, 199, 199, 0) 100%);
+  background: linear-gradient(0deg, rgba(180, 180, 195, 0.7) 0%, rgba(180, 180, 195, 0.4) 40%, rgba(180, 180, 195, 0) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

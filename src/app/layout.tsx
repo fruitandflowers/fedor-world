@@ -8,16 +8,19 @@ import "lenis/dist/lenis.css";
 import "./globals.css";
 
 const gaqire = localFont({
-  src: "../../public/fonts/GAQIRE-Regular.otf",
+  src: [
+    { path: "../../public/fonts/GAQIRE-Regular.woff2" },
+    { path: "../../public/fonts/GAQIRE-Regular.otf" },
+  ],
   variable: "--font-display",
   display: "swap",
 });
 
 const neueMontreal = localFont({
   src: [
-    { path: "../../public/fonts/NeueMontreal-Light.otf", weight: "300" },
-    { path: "../../public/fonts/NeueMontreal-Regular.otf", weight: "400" },
-    { path: "../../public/fonts/NeueMontreal-Bold.otf", weight: "700" },
+    { path: "../../public/fonts/NeueMontreal-Light.woff2", weight: "300" },
+    { path: "../../public/fonts/NeueMontreal-Regular.woff2", weight: "400" },
+    { path: "../../public/fonts/NeueMontreal-Bold.woff2", weight: "700" },
   ],
   variable: "--font-body",
   display: "swap",
