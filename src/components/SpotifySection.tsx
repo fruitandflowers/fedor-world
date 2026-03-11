@@ -83,7 +83,7 @@ export default function SpotifySection() {
         Presidential radio station
       </h2>
 
-      {/* Spotify embed — Framer: 740x477px frame, absolute, top 446px, centerX 50% */}
+      {/* Spotify embed — Framer: 740x477px frame, absolute, top 446px, centerX 50%, z-index 8 */}
       <div
         ref={embedRef}
         className="absolute z-[8]"
@@ -107,18 +107,146 @@ export default function SpotifySection() {
         />
       </div>
 
-      {/* Landscape image at bottom — Framer: 1fr x 679px, z-index 1, with layout stack */}
+      {/* Floating gem — Framer: 102x99px, centerX 51%, centerY 50%, z-index 1 */}
+      <div
+        className="absolute z-[1] pointer-events-none"
+        style={{
+          width: "102px",
+          height: "99px",
+          left: "51%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <Image src="/images/misc/floating-gem-1.png" alt="" fill className="object-contain" sizes="102px" />
+      </div>
+
+      {/* Floating bottle — Framer: 89x151px, rotation -42, left 592px, centerY 51%, z-index 0 */}
+      <div
+        className="absolute z-0 pointer-events-none"
+        style={{
+          width: "89px",
+          height: "151px",
+          left: "592px",
+          top: "51%",
+          transform: "translateY(-50%) rotate(-42deg)",
+        }}
+      >
+        <Image src="/images/misc/floating-bottle.png" alt="" fill className="object-contain" sizes="89px" />
+      </div>
+
+      {/* Floating logo — Framer: 175x87px, bottom 815px, left 899px, z-index 1 */}
+      <div
+        className="absolute z-[1] pointer-events-none"
+        style={{
+          width: "175px",
+          height: "87px",
+          bottom: "815px",
+          left: "899px",
+        }}
+      >
+        <Image src="/images/misc/floating-logo.png" alt="" fill className="object-contain" sizes="175px" />
+      </div>
+
+      {/* Stone — Framer: 349x382px, rotation -17, right -671px, centerY 45%, z-index 1 */}
+      <div
+        className="absolute z-[1] pointer-events-none"
+        style={{
+          width: "349px",
+          height: "382px",
+          right: "-671px",
+          top: "45%",
+          transform: "translateY(-50%) rotate(-17deg)",
+        }}
+      >
+        <Image src="/images/misc/floating-stone.png" alt="" fill className="object-contain" sizes="349px" />
+      </div>
+
+      {/* Small gem rotated — Framer: 58x57px, rotation 308, top 869px, left 853px, z-index 1 */}
+      <div
+        className="absolute z-[1] pointer-events-none"
+        style={{
+          width: "58px",
+          height: "57px",
+          top: "869px",
+          left: "853px",
+          transform: "rotate(308deg)",
+        }}
+      >
+        <Image src="/images/misc/floating-gem-1.png" alt="" fill className="object-contain" sizes="58px" />
+      </div>
+
+      {/* Landscape image at bottom — Framer: 1fr x 679px, z-index 1, with floating elements on top */}
       <div
         className="absolute bottom-0 left-0 right-0 z-[1]"
         style={{ height: "679px" }}
       >
         <Image
-          src="/images/misc/nomination-cta.png"
+          src="/images/misc/landscape-bottom.png"
           alt="Landscape"
           fill
           className="object-cover"
           sizes="100vw"
         />
+
+        {/* Floating petal 1 — Framer: 148x307px, rotation 35, top -280px, left 734px, z-index -1 */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: "148px",
+            height: "307px",
+            top: "-280px",
+            left: "734px",
+            transform: "rotate(35deg)",
+            zIndex: -1,
+          }}
+        >
+          <Image src="/images/misc/floating-petal-1.png" alt="" fill className="object-contain" sizes="148px" />
+        </div>
+
+        {/* Floating petal 2 — Framer: 107x142px, top -44px, centerX 49%, z-index -1 */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: "107px",
+            height: "142px",
+            top: "-44px",
+            left: "49%",
+            transform: "translateX(-50%)",
+            zIndex: -1,
+          }}
+        >
+          <Image src="/images/misc/floating-petal-2.png" alt="" fill className="object-contain" sizes="107px" />
+        </div>
+
+        {/* Floating petal 3 — Framer: 176x124px, top 0px, left 478px, z-index -1 */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: "176px",
+            height: "124px",
+            top: "0px",
+            left: "478px",
+            zIndex: -1,
+          }}
+        >
+          <Image src="/images/misc/floating-petal-3.png" alt="" fill className="object-contain" sizes="176px" />
+        </div>
+
+        {/* Floating petal 4 — Framer: 91x160px, rotation -45, top -90px, left 804px, z-index -1 */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: "91px",
+            height: "160px",
+            top: "-90px",
+            left: "804px",
+            transform: "rotate(-45deg)",
+            zIndex: -1,
+          }}
+        >
+          <Image src="/images/misc/floating-petal-4.png" alt="" fill className="object-contain" sizes="91px" />
+        </div>
       </div>
     </section>
   );

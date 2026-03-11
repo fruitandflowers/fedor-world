@@ -5,7 +5,9 @@ import Image from "next/image";
 import { pastLives } from "@/data/past-lives";
 
 export default function PastLivesCarousel() {
-  const [current, setCurrent] = useState(3); // Framer startFrom="4" (0-indexed: 3)
+  // Framer startFrom="4" appears to be 1-based, centering on item 4.
+  // With alignment="center" and 3 visible, this shows items 2,3,4 (indices in 0-based)
+  const [current, setCurrent] = useState(2);
   const sectionRef = useRef<HTMLElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -55,10 +57,10 @@ export default function PastLivesCarousel() {
     }, 2300);
   }, [isDragging, itemCount]);
 
-  // Calculate item width based on container
-  const containerWidth = 1440;
-  const totalGapWidth = gap * (visibleCount - 1);
-  const itemWidth = (containerWidth - totalGapWidth) / visibleCount;
+  // Each item takes 1/3 of container minus gaps
+  // Using calc() for responsive sizing
+  const itemWidthCalc = `calc((100% - ${gap * (visibleCount - 1)}px) / ${visibleCount})`;
+  const slideOffset = `calc(${current} * (calc((100% - ${gap * (visibleCount - 1)}px) / ${visibleCount}) + ${gap}px))`;
 
   return (
     <section
@@ -90,8 +92,8 @@ export default function PastLivesCarousel() {
 
       {/* Slideshow — 800px height, 3 items, gap 32, auto-play */}
       <div
-        className="relative overflow-hidden mx-auto"
-        style={{ height: "800px", maxWidth: "1440px" }}
+        className="relative overflow-hidden"
+        style={{ height: "800px" }}
         onMouseDown={(e) => handleDragStart(e.clientX)}
         onMouseMove={(e) => handleDragMove(e.clientX)}
         onMouseUp={handleDragEnd}
@@ -104,7 +106,7 @@ export default function PastLivesCarousel() {
           className="flex h-full"
           style={{
             gap: `${gap}px`,
-            transform: `translateX(-${current * (itemWidth + gap)}px)`,
+            transform: `translateX(calc(-1 * ${slideOffset}))`,
             transition: isDragging ? "none" : "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
             cursor: isDragging ? "grabbing" : "grab",
           }}
@@ -113,9 +115,9 @@ export default function PastLivesCarousel() {
             <div
               key={life.year}
               className="flex-shrink-0 h-full"
-              style={{ width: `${itemWidth}px` }}
+              style={{ width: itemWidthCalc }}
             >
-              <div className="relative h-full overflow-hidden" style={{ borderRadius: "0px" }}>
+              <div className="relative h-full overflow-hidden">
                 <Image
                   src={life.image}
                   alt={`Fedor ${life.year} — ${life.label}`}
@@ -123,14 +125,15 @@ export default function PastLivesCarousel() {
                   className="object-cover"
                   sizes="(max-width: 640px) 100vw, 33vw"
                 />
-                {/* Year label overlaid on image */}
-                <div className="absolute bottom-0 left-0 right-0 p-6">
+                {/* Year label overlaid on image bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-8">
                   <p
                     className="text-display"
                     style={{
                       fontSize: "54px",
                       color: "#000000",
                       letterSpacing: "-3.78px",
+                      textShadow: "0 0 20px rgba(255,255,255,0.5)",
                     }}
                   >
                     FEDOR {life.year}

@@ -77,7 +77,7 @@ export default function NominationCTA() {
         }}
       >
         <Image
-          src="/images/hero/hero-element-2.png"
+          src="/images/hero/lovey.png"
           alt=""
           fill
           className="object-cover"
