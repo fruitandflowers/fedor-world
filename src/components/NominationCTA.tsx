@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import ScaleReveal, { SPRING_STANDARD } from "./ScaleReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,28 +16,39 @@ export default function NominationCTA() {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 60%",
-          toggleActions: "play none none none",
-        },
-      });
-
       if (headingRef.current) {
-        tl.fromTo(
+        gsap.fromTo(
           headingRef.current,
           { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 60%",
+              toggleActions: "play none none none",
+            },
+          }
         );
       }
 
       if (buttonRef.current) {
-        tl.fromTo(
+        gsap.fromTo(
           buttonRef.current,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
-          "-=0.4"
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 50%",
+              toggleActions: "play none none none",
+            },
+          }
         );
       }
     }, sectionRef);
@@ -49,45 +59,51 @@ export default function NominationCTA() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full flex flex-col items-center justify-center"
-      style={{ minHeight: "100vh" }}
+      className="relative w-full overflow-hidden"
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
     >
-      {/* Background landscape with Scale Reveal — deeper scale + y slide (animation #9: scale 0.8→1.0, y:60→0, STANDARD) */}
-      <ScaleReveal
-        className="absolute inset-0"
-        initialScale={0.8}
-        spring={SPRING_STANDARD}
-        initialExtra={{ y: 60 }}
-        finalExtra={{ y: 0 }}
-        threshold={0.3}
-      >
-        <div className="relative w-full h-full">
-          <Image
-            src="/images/misc/nomination-cta.png"
-            alt="Cosmic landscape"
-            fill
-            className="object-cover"
-            sizes="100vw"
-          />
-        </div>
-      </ScaleReveal>
-
-      {/* Dark overlay */}
+      {/* Lovey image — Framer: 537x812px, absolute, bottom -10px, left 895.5px, z-index 2 */}
       <div
-        className="absolute inset-0 z-[1]"
+        className="absolute z-[2]"
         style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%)",
+          width: "537px",
+          height: "812px",
+          bottom: "-10px",
+          left: "895.5px",
         }}
-      />
+      >
+        <Image
+          src="/images/hero/hero-element-2.png"
+          alt=""
+          fill
+          className="object-cover"
+          sizes="537px"
+        />
+      </div>
 
-      {/* Content */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+      {/* Clouds section — Framer: 100% x 947px, black bg, z-index 1, overflow visible */}
+      <div
+        className="w-full relative z-[1]"
+        style={{
+          height: "947px",
+          backgroundColor: "hsl(0, 0%, 0%)",
+        }}
+      >
+        {/* "Every World Counts. Add Yours." — Framer: absolute, top 830px, centerX 35% */}
         <h2
           ref={headingRef}
-          className="text-display text-white mb-16"
+          className="text-display text-white absolute"
           style={{
-            fontSize: "var(--text-display-lg)",
+            top: "830px",
+            left: "35%",
+            transform: "translateX(-50%)",
+            fontSize: "clamp(50px, 6.2vw, 90px)",
+            letterSpacing: "-2.6px",
+            lineHeight: 0.9,
           }}
         >
           Every World Counts.
@@ -95,22 +111,22 @@ export default function NominationCTA() {
           Add Yours.
         </h2>
 
+        {/* "Nominate Your World" button — Framer: absolute, bottom -332px, left 285.5px */}
         <a
           ref={buttonRef}
           href="https://form.typeform.com/to/y2NrRDGp"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center justify-center text-white no-underline hover:brightness-110 hover:scale-[1.02]"
+          className="absolute z-[3] inline-flex items-center justify-center text-white no-underline hover:brightness-110"
           style={{
-            width: "clamp(280px, 45vw, 700px)",
-            height: "clamp(72px, 10vw, 160px)",
-            background: "var(--color-accent-pink)",
+            bottom: "-332px",
+            left: "285.5px",
+            padding: "20px 100px",
+            backgroundColor: "rgb(255, 36, 186)",
             borderRadius: "10px",
-            fontFamily: "var(--font-body-stack)",
-            fontSize: "clamp(16px, 2.2vw, 26px)",
-            fontWeight: 700,
-            letterSpacing: "-0.3px",
-            transition: "transform 0.4s var(--ease-out), filter 0.4s ease",
+            fontFamily: "'DM Sans', var(--font-body-stack)",
+            fontSize: "var(--text-body-md)",
+            fontWeight: 600,
           }}
         >
           Nominate Your World

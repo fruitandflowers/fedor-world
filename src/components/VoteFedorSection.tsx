@@ -4,49 +4,21 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { motion, useInView } from "framer-motion";
-import ScaleReveal, { SPRING_FAST, SPRING_HEAVY } from "./ScaleReveal";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function VoteFedorSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
-  const overlayTextRef = useRef<HTMLDivElement>(null);
-
-  // Rock wall horizontal slides — HEAVY spring (animation #3 from MainPage.mjs)
-  const leftRockRef = useRef<HTMLDivElement>(null);
-  const leftRockInView = useInView(leftRockRef, { once: true, amount: 0.3 });
-  const rightRockRef = useRef<HTMLDivElement>(null);
-  const rightRockInView = useInView(rightRockRef, { once: true, amount: 0.3 });
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
-      // Hashtag text reveal
+      // Bottom overlay text reveal
       if (textRef.current) {
         gsap.fromTo(
           textRef.current,
-          { opacity: 0, y: 40 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 60%",
-              toggleActions: "play none none none",
-            },
-          }
-        );
-      }
-
-      // "What's the Big Galactic Idea?" overlay text
-      if (overlayTextRef.current) {
-        gsap.fromTo(
-          overlayTextRef.current,
           { opacity: 0, y: 30 },
           {
             opacity: 1,
@@ -54,7 +26,7 @@ export default function VoteFedorSection() {
             duration: 0.8,
             ease: "power3.out",
             scrollTrigger: {
-              trigger: overlayTextRef.current,
+              trigger: textRef.current,
               start: "top 85%",
               toggleActions: "play none none none",
             },
@@ -69,16 +41,11 @@ export default function VoteFedorSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full"
-      style={{ minHeight: "100vh" }}
+      className="relative w-full overflow-hidden"
+      style={{ height: "1183px" }}
     >
-      {/* Layer 1: Golden sky background — DOMINANT, fills entire section */}
-      <ScaleReveal
-        className="absolute inset-0"
-        spring={SPRING_FAST}
-        initialScale={0.9}
-        threshold={0.3}
-      >
+      {/* Layer 0: Golden sky background — fills entire section (Framer: backgroundImage, 1px width = fill) */}
+      <div className="absolute inset-0">
         <Image
           src="/images/hero/hero-photo-3.webp"
           alt="Golden canyon sky"
@@ -87,122 +54,112 @@ export default function VoteFedorSection() {
           sizes="100vw"
           priority
         />
-      </ScaleReveal>
+      </div>
 
-      {/* Layer 2: Left rock wall — narrow frame edge only (15% width) */}
-      <motion.div
-        ref={leftRockRef}
-        className="absolute left-0 top-0 bottom-0 z-[1] pointer-events-none"
-        style={{ width: "18%" }}
-        initial={{ x: -100 }}
-        animate={leftRockInView ? { x: 0 } : { x: -100 }}
-        transition={{
-          type: "spring",
-          stiffness: SPRING_HEAVY.stiffness,
-          damping: SPRING_HEAVY.damping,
-          mass: SPRING_HEAVY.mass,
+      {/* Layer 1: Right rock wall — Framer: 2123px wide, right: -1446px, z-index 2 */}
+      <div
+        className="absolute top-0 bottom-0 z-[2] pointer-events-none"
+        style={{
+          width: "2123px",
+          right: "-1446px",
         }}
       >
         <Image
           src="/images/hero/hero-photo-1.webp"
           alt=""
           fill
-          className="object-cover object-right"
-          sizes="18vw"
+          className="object-cover"
+          sizes="2123px"
         />
-      </motion.div>
+      </div>
 
-      {/* Layer 3: Right rock wall — narrow frame edge only (15% width) */}
-      <motion.div
-        ref={rightRockRef}
-        className="absolute right-0 top-0 bottom-0 z-[1] pointer-events-none"
-        style={{ width: "18%" }}
-        initial={{ x: 100 }}
-        animate={rightRockInView ? { x: 0 } : { x: 100 }}
-        transition={{
-          type: "spring",
-          stiffness: SPRING_HEAVY.stiffness,
-          damping: SPRING_HEAVY.damping,
-          mass: SPRING_HEAVY.mass,
+      {/* Layer 2: Left rock wall — Framer: 2478px wide, left: -1642px, z-index 2 */}
+      <div
+        className="absolute top-0 bottom-0 z-[2] pointer-events-none"
+        style={{
+          width: "2478px",
+          left: "-1642px",
         }}
       >
         <Image
           src="/images/hero/hero-photo-2.webp"
           alt=""
           fill
-          className="object-cover object-left"
-          sizes="18vw"
+          className="object-cover"
+          sizes="2478px"
         />
-      </motion.div>
-
-      {/* Layer 4: Fedor standing figure — centered */}
-      <div
-        className="absolute inset-0 z-[2] flex items-end justify-center pointer-events-none"
-      >
-        <div className="relative" style={{ width: "clamp(200px, 25vw, 400px)", height: "75%" }}>
-          <Image
-            src="/images/hero/fedor-standing.png"
-            alt="Fedor standing"
-            fill
-            className="object-contain object-bottom"
-            sizes="400px"
-          />
-        </div>
       </div>
 
-      {/* Hashtag text */}
+      {/* Layer 3: Fedor standing — Framer: 290x558px, centerX 49%, centerY 49%, z-index 1 */}
       <div
-        ref={textRef}
+        className="absolute z-[1] pointer-events-none"
+        style={{
+          width: "290px",
+          height: "558px",
+          left: "50%",
+          top: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
+      >
+        <Image
+          src="/images/hero/fedor-standing.png"
+          alt="Fedor standing"
+          fill
+          className="object-contain"
+          sizes="290px"
+        />
+      </div>
+
+      {/* Layer 4: Text overlay — #votefedor2025 at top */}
+      <div
         className="absolute z-[3]"
         style={{
-          top: "15%",
-          left: "var(--section-padding-x)",
+          top: "299px",
+          left: "50%",
+          transform: "translateX(-50%)",
         }}
       >
         <p
-          className="text-display text-white"
+          className="text-display text-white whitespace-nowrap"
           style={{
-            fontSize: "var(--text-display-sm)",
+            fontSize: "45px",
             letterSpacing: "-3.15px",
-            textShadow: "0 2px 40px rgba(0,0,0,0.5)",
           }}
         >
-          #VOTEFEDOR2025
+          #votefedor2025
         </p>
       </div>
 
-      {/* Dark overlay at bottom with "What's the Big Galactic Idea?" */}
+      {/* Layer 5: Bottom text area — "What's the Big Galactic Idea?" */}
       <div
-        className="absolute bottom-0 left-0 right-0 z-[4]"
+        ref={textRef}
+        className="absolute bottom-0 left-0 right-0 z-[3]"
         style={{
           background:
             "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%)",
-          padding: "var(--section-padding-y) var(--section-padding-x)",
-          paddingTop: "clamp(160px, 20vw, 280px)",
+          paddingBottom: "134px",
+          paddingTop: "200px",
         }}
       >
-        <div
-          ref={overlayTextRef}
-          className="max-w-3xl mx-auto text-center"
-        >
+        <div className="text-center">
           <h2
             className="text-display text-white mb-8"
             style={{
-              fontSize: "var(--text-display-md)",
+              fontSize: "40px",
+              letterSpacing: "-2.8px",
             }}
           >
             What&apos;s The Big Galactic Idea?
           </h2>
           <p
+            className="mx-auto"
             style={{
-              fontFamily: "var(--font-body-stack)",
+              fontFamily: "var(--font-accent-stack)",
               fontSize: "var(--text-body-md)",
               color: "var(--color-text-muted)",
               letterSpacing: "-0.3px",
               lineHeight: 1.6,
-              maxWidth: "600px",
-              marginLeft: "auto",
-              marginRight: "auto",
+              maxWidth: "561px",
             }}
           >
             You can invite me to lead transformation in your world. Together, our

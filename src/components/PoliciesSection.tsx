@@ -1,63 +1,58 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { policies } from "@/data/policies";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function PoliciesSection() {
   const sectionRef = useRef<HTMLElement>(null);
-  const labelRef = useRef<HTMLParagraphElement>(null);
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  const subtitleRef = useRef<HTMLParagraphElement>(null);
-  const ctaRef = useRef<HTMLAnchorElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top 70%",
-          toggleActions: "play none none none",
-        },
-      });
-
-      if (labelRef.current) {
-        tl.fromTo(
-          labelRef.current,
-          { opacity: 0, y: 15 },
-          { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }
+      if (contentRef.current) {
+        gsap.fromTo(
+          contentRef.current,
+          { opacity: 0, y: 40 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 70%",
+              toggleActions: "play none none none",
+            },
+          }
         );
       }
 
-      if (headingRef.current) {
-        tl.fromTo(
-          headingRef.current,
-          { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" },
-          "-=0.3"
-        );
-      }
-
-      if (subtitleRef.current) {
-        tl.fromTo(
-          subtitleRef.current,
+      if (cardsRef.current) {
+        const cards = cardsRef.current.querySelectorAll(".policy-card");
+        gsap.fromTo(
+          cards,
           { opacity: 0, y: 30 },
-          { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" },
-          "-=0.4"
-        );
-      }
-
-      if (ctaRef.current) {
-        tl.fromTo(
-          ctaRef.current,
-          { opacity: 0, y: 20, scale: 0.95 },
-          { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: "power3.out" },
-          "-=0.3"
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            stagger: 0.05,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: cardsRef.current,
+              start: "top 85%",
+              toggleActions: "play none none none",
+            },
+          }
         );
       }
     }, sectionRef);
@@ -69,71 +64,127 @@ export default function PoliciesSection() {
     <section
       ref={sectionRef}
       style={{
-        backgroundColor: "#000000",
-        padding: "var(--section-padding-y) var(--section-padding-x)",
-        textAlign: "center",
+        backgroundColor: "rgb(0, 0, 0)",
+        padding: "100px 60px 100px 90px",
+        overflow: "hidden",
       }}
     >
-      <p
-        ref={labelRef}
-        className="text-accent"
-        style={{
-          color: "var(--color-accent-magenta)",
-          marginBottom: "32px",
-        }}
+      {/* Content row — Framer: 1fr width, 521px height, centered */}
+      <div
+        ref={contentRef}
+        className="flex items-center justify-center"
+        style={{ height: "521px" }}
       >
-        Explore the Vision
-      </p>
+        <div
+          className="flex flex-col items-center gap-[13px]"
+          style={{ width: "1277px", maxWidth: "100%" }}
+        >
+          <h2
+            className="text-display text-white w-full"
+            style={{
+              fontSize: "var(--text-display-xl)",
+              letterSpacing: "-2px",
+              lineHeight: 1,
+              overflow: "visible",
+            }}
+          >
+            Policies And Worlds
+            <br />
+            IN ACTION:
+          </h2>
 
-      <h2
-        ref={headingRef}
-        className="text-display"
-        style={{
-          fontSize: "var(--text-display-xl)",
-          color: "#ffffff",
-          letterSpacing: "-2px",
-          lineHeight: 1.2,
-          marginBottom: "32px",
-        }}
-      >
-        Policies And Worlds
-        <br />
-        IN ACTION:
-      </h2>
+          <p
+            className="w-full"
+            style={{
+              fontFamily: "var(--font-body-stack)",
+              fontSize: "24px",
+              fontWeight: 400,
+              color: "var(--color-text-muted)",
+              letterSpacing: "-0.5px",
+              lineHeight: 1.4,
+            }}
+          >
+            Calling All Beings to Craft Our Collective Future
+          </p>
 
-      <p
-        ref={subtitleRef}
-        style={{
-          fontFamily: "var(--font-body-stack)",
-          fontSize: "var(--text-body-lg)",
-          fontWeight: 400,
-          color: "var(--color-text-muted)",
-          letterSpacing: "-0.5px",
-          lineHeight: 1.5,
-          marginBottom: "48px",
-        }}
-      >
-        Calling All Beings to Craft Our Collective Future
-      </p>
+          <div className="w-full" style={{ marginTop: "15px" }}>
+            <Link
+              href="/policies"
+              className="inline-flex items-center gap-3 text-white no-underline hover:brightness-110"
+              style={{
+                padding: "40px 25px",
+                height: "40px",
+                background: "rgb(171, 19, 87)",
+                borderRadius: "20px",
+                fontFamily: "var(--font-body-stack)",
+                fontSize: "34px",
+                fontWeight: 700,
+              }}
+            >
+              All Policies & Worlds
+              <span style={{ fontSize: "36px", transform: "rotate(-45deg)", display: "inline-block" }}>
+                &rarr;
+              </span>
+            </Link>
+          </div>
+        </div>
+      </div>
 
-      <Link
-        ref={ctaRef}
-        href="/policies"
-        className="inline-flex items-center gap-3 text-white no-underline hover:brightness-110"
-        style={{
-          padding: "0 48px",
-          height: "80px",
-          background: "var(--gradient-cta-btn)",
-          borderRadius: "var(--radius-pill)",
-          fontFamily: "var(--font-body-stack)",
-          fontSize: "var(--text-body-md)",
-          fontWeight: 700,
-          letterSpacing: "-0.3px",
-        }}
+      {/* Policy cards — Framer: 753px wide, gap 21px, vertical stack */}
+      <div
+        ref={cardsRef}
+        className="mx-auto flex flex-col"
+        style={{ width: "753px", maxWidth: "100%", gap: "21px" }}
       >
-        All Policies & Worlds
-        <span style={{ fontSize: "20px" }}>&#8599;</span>
-      </Link>
+        {policies.map((policy) => (
+          <Link
+            key={policy.slug}
+            href={`/policies/${policy.slug}`}
+            className="policy-card flex items-center no-underline group"
+            style={{
+              gap: "40px",
+              padding: "15px",
+              borderRadius: "42px",
+              background: "var(--gradient-cta-btn)",
+              flexWrap: "wrap",
+            }}
+          >
+            {/* Thumbnail — Framer: 150x150px, borderRadius 30px */}
+            <div
+              className="relative flex-shrink-0 overflow-hidden"
+              style={{
+                width: "150px",
+                height: "150px",
+                borderRadius: "30px",
+              }}
+            >
+              <Image
+                src={policy.image}
+                alt={policy.title}
+                fill
+                className="object-cover"
+                sizes="150px"
+              />
+            </div>
+
+            {/* Title — Framer: Neue Montreal Regular, inline text style /Heading 2 */}
+            <h3
+              className="flex-1"
+              style={{
+                fontFamily: "var(--font-body-stack)",
+                fontSize: "23px",
+                fontWeight: 400,
+                color: "#ffffff",
+                letterSpacing: "-0.5px",
+                lineHeight: 1.4,
+                minWidth: "200px",
+              }}
+            >
+              {policy.title}
+            </h3>
+          </Link>
+        ))}
+      </div>
     </section>
   );
 }

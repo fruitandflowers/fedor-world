@@ -4,6 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
+const desktopLinks = [
+  { href: "https://instagram.com/fedor.president", label: "Instagram", external: true },
+  { href: "/policies/ourcabulary", label: "Ourcabulary" },
+  { href: "/policies/pyramid", label: "Pyramid" },
+  { href: "/policies", label: "Policies" },
+];
+
 const menuLinks = [
   { href: "/", label: "Home" },
   { href: "https://relevant.ws/fedor", label: "Support Fedor", external: true },
@@ -25,7 +32,6 @@ export default function Navigation() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [handleScroll]);
 
-  // Lock body scroll when menu is open
   useEffect(() => {
     if (menuOpen) {
       document.body.style.overflow = "hidden";
@@ -40,6 +46,9 @@ export default function Navigation() {
       <nav
         className="ghost-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between"
         style={{
+          width: "1440px",
+          maxWidth: "100%",
+          margin: "0 auto",
           height: "var(--nav-height)",
           padding: "0 var(--section-padding-x)",
           backgroundColor: scrolled ? "rgba(0, 0, 0, 0.8)" : "transparent",
@@ -55,10 +64,63 @@ export default function Navigation() {
           FEDOR
         </Link>
 
-        {/* Hamburger */}
+        {/* Desktop links — hidden on mobile */}
+        <div className="hidden md:flex items-center gap-8">
+          {desktopLinks.map((link) => {
+            const style = {
+              fontFamily: "var(--font-body-stack)",
+              fontSize: "16px",
+              color: "rgba(255, 255, 255, 0.7)",
+              letterSpacing: "-0.3px",
+            };
+
+            return link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+                style={style}
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.label}
+                href={link.href}
+                className="hover:text-white transition-colors"
+                style={style}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+
+          {/* CTA button — Framer: magenta border + text */}
+          <a
+            href="https://form.typeform.com/to/y2NrRDGp"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center text-white hover:brightness-110"
+            style={{
+              padding: "10px 24px",
+              border: "1px solid var(--color-accent-magenta)",
+              borderRadius: "20px",
+              fontFamily: "var(--font-body-stack)",
+              fontSize: "14px",
+              fontWeight: 600,
+              letterSpacing: "-0.3px",
+            }}
+          >
+            Nominate Your World
+          </a>
+        </div>
+
+        {/* Hamburger — visible on mobile, hidden on desktop */}
         <button
           onClick={() => setMenuOpen(true)}
-          className="p-2 cursor-pointer"
+          className="md:hidden p-2 cursor-pointer"
           aria-label="Open menu"
           style={{ background: "none", border: "none" }}
         >
@@ -88,7 +150,6 @@ export default function Navigation() {
             className="fixed inset-0 z-[100] flex flex-col items-center justify-center gap-8"
             style={{ backgroundColor: "rgba(0, 0, 0, 0.95)" }}
           >
-            {/* Close button */}
             <button
               onClick={() => setMenuOpen(false)}
               className="absolute top-6 right-8 text-white text-3xl cursor-pointer hover:opacity-70"
