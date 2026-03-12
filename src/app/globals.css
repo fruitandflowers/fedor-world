@@ -93,12 +93,13 @@ html {
   scrollbar-width: none;
 }
 
-/* Display text utility */
+/* Display text utility — GAQIRE is always uppercase in the original */
 .text-display {
   font-family: var(--font-display-stack);
   font-weight: 400;
   letter-spacing: var(--ls-display);
   line-height: var(--lh-display);
+  text-transform: uppercase;
 }
 
 /* Gradient text fade — used on hero title for ethereal effect */

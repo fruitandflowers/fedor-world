@@ -69,18 +69,18 @@ export default function SpotifySection() {
       {/* "Presidential radio station" title — Framer: absolute, top 23px, centerX 50% */}
       <h2
         ref={titleRef}
-        className="text-display absolute text-center"
+        className="text-accent absolute text-center"
         style={{
-          top: "23px",
+          top: "40px",
           left: "50%",
           transform: "translateX(-50%)",
-          fontSize: "clamp(48px, 6.1vw, 88px)",
-          color: "var(--color-hero-text)",
-          letterSpacing: "-6.16px",
+          fontSize: "14px",
+          color: "rgba(255, 255, 255, 0.6)",
+          letterSpacing: "0.1em",
           whiteSpace: "nowrap",
         }}
       >
-        Presidential radio station
+        PRESIDENTIAL RADIO STATION
       </h2>
 
       {/* Spotify embed — Framer: 740x477px frame, absolute, top 446px, centerX 50%, z-index 8 */}

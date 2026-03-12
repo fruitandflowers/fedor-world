@@ -64,63 +64,10 @@ export default function Navigation() {
           FEDOR
         </Link>
 
-        {/* Desktop links — hidden on mobile */}
-        <div className="hidden md:flex items-center gap-8">
-          {desktopLinks.map((link) => {
-            const style = {
-              fontFamily: "var(--font-body-stack)",
-              fontSize: "16px",
-              color: "rgba(255, 255, 255, 0.7)",
-              letterSpacing: "-0.3px",
-            };
-
-            return link.external ? (
-              <a
-                key={link.label}
-                href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-                style={style}
-              >
-                {link.label}
-              </a>
-            ) : (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="hover:text-white transition-colors"
-                style={style}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
-
-          {/* CTA button — Framer: magenta border + text */}
-          <a
-            href="https://form.typeform.com/to/y2NrRDGp"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center text-white hover:brightness-110"
-            style={{
-              padding: "10px 24px",
-              border: "1px solid var(--color-accent-magenta)",
-              borderRadius: "20px",
-              fontFamily: "var(--font-body-stack)",
-              fontSize: "14px",
-              fontWeight: 600,
-              letterSpacing: "-0.3px",
-            }}
-          >
-            Nominate Your World
-          </a>
-        </div>
-
-        {/* Hamburger — visible on mobile, hidden on desktop */}
+        {/* Hamburger — visible on all viewports (original design is minimal: logo + hamburger) */}
         <button
           onClick={() => setMenuOpen(true)}
-          className="md:hidden p-2 cursor-pointer"
+          className="p-2 cursor-pointer"
           aria-label="Open menu"
           style={{ background: "none", border: "none" }}
         >

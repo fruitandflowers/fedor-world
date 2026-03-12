@@ -103,7 +103,7 @@ export default function PastLivesCarousel() {
         style={{
           top: "251px",
           fontSize: "clamp(40px, 5.6vw, 80px)",
-          color: "var(--color-hero-text)",
+          color: "rgb(20, 25, 50)",
           letterSpacing: "-5.6px",
           lineHeight: 0.9,
         }}
@@ -143,10 +143,10 @@ export default function PastLivesCarousel() {
           {tripled.map((life, i) => (
             <div
               key={`${life.year}-${i}`}
-              className="flex-shrink-0 h-full"
-              style={{ width: itemWidthCalc }}
+              className="flex-shrink-0 flex flex-col"
+              style={{ width: itemWidthCalc, height: "100%" }}
             >
-              <div className="relative h-full overflow-hidden">
+              <div className="relative flex-1 overflow-hidden">
                 <Image
                   src={life.image}
                   alt={`Fedor ${life.year} — ${life.label}`}
@@ -154,20 +154,18 @@ export default function PastLivesCarousel() {
                   className="object-cover"
                   sizes="(max-width: 640px) 100vw, 33vw"
                 />
-                <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <p
-                    className="text-display"
-                    style={{
-                      fontSize: "54px",
-                      color: "#000000",
-                      letterSpacing: "-3.78px",
-                      textShadow: "0 0 20px rgba(255,255,255,0.5)",
-                    }}
-                  >
-                    FEDOR {life.year}
-                  </p>
-                </div>
               </div>
+              <p
+                className="text-display"
+                style={{
+                  fontSize: "54px",
+                  color: "#000000",
+                  letterSpacing: "-3.78px",
+                  marginTop: "16px",
+                }}
+              >
+                FEDOR {life.year}
+              </p>
             </div>
           ))}
         </div>
