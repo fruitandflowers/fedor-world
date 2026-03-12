@@ -81,9 +81,9 @@ export default function IntroSection() {
         ref={portraitRef}
         className="absolute z-[1]"
         style={{
-          width: "1244px",
-          height: "1552px",
-          bottom: "-180px",
+          width: "900px",
+          height: "1125px",
+          bottom: "-60px",
           left: "79%",
           transform: "translateX(-50%)",
         }}
