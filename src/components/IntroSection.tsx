@@ -74,19 +74,17 @@ export default function IntroSection() {
       style={{
         height: "1200px",
         backgroundColor: "hsl(0, 0%, 100%)",
-        marginTop: "-31px",
+        marginTop: "0px",
       }}
     >
       {/* Portrait — Framer: 1244x1552px, absolute, centerX 79%, bottom -180px, z-index 1 */}
-      {/* Adjusted: bottom -320px so head sits on white bg (not clipped by hero earth) */}
-      {/* and shoulder extends naturally to bottom edge without harsh cut */}
       <div
         ref={portraitRef}
         className="absolute z-[1]"
         style={{
           width: "1244px",
           height: "1552px",
-          bottom: "-320px",
+          bottom: "-180px",
           left: "79%",
           transform: "translateX(-50%)",
         }}

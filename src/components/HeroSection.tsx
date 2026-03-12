@@ -84,7 +84,7 @@ export default function HeroSection() {
       style={{
         height: "1400px",
         background: "var(--gradient-hero-bg)",
-        clipPath: "inset(0 0 -50px 0)",
+        overflow: "hidden",
       }}
     >
       {/* Title text — Framer: absolute, 1138px wide, centerX 50%, centerY 31%, z-index 1 */}
@@ -155,7 +155,7 @@ export default function HeroSection() {
         style={{
           width: "max(1507px, 100vw)",
           height: "466px",
-          bottom: "-31px",
+          bottom: "0px",
           left: "50%",
           transform: "translateX(-50%)",
         }}
