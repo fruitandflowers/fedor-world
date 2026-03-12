@@ -74,6 +74,7 @@ export default function IntroSection() {
       style={{
         height: "1200px",
         backgroundColor: "hsl(0, 0%, 100%)",
+        marginTop: "-2px",
       }}
     >
       {/* Portrait — Framer: 1244x1552px, absolute, centerX 79%, bottom -180px, z-index 1 */}

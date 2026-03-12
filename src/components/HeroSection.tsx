@@ -153,7 +153,7 @@ export default function HeroSection() {
         style={{
           width: "max(1507px, 100vw)",
           height: "466px",
-          bottom: "-31px",
+          bottom: "0px",
           left: "50%",
           transform: "translateX(-50%)",
         }}
