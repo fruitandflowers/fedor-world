@@ -58,10 +58,10 @@ export default function HeroSection() {
         });
       }
 
-      // Layer 3: Earth/sand moves up fastest (parallax factor ~80%) — emerges from below
+      // Layer 3: Earth/sand — minimal movement to keep it flush at bottom
       if (sandRef.current) {
         gsap.to(sandRef.current, {
-          y: -250,
+          y: -30,
           ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,
@@ -79,10 +79,11 @@ export default function HeroSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full overflow-hidden"
+      className="relative w-full"
       style={{
         height: "1400px",
         background: "var(--gradient-hero-bg)",
+        clipPath: "inset(0 0 -50px 0)",
       }}
     >
       {/* Title text — Framer: absolute, 1138px wide, centerX 50%, centerY 31%, z-index 1 */}
@@ -153,7 +154,7 @@ export default function HeroSection() {
         style={{
           width: "max(1507px, 100vw)",
           height: "466px",
-          bottom: "0px",
+          bottom: "-31px",
           left: "50%",
           transform: "translateX(-50%)",
         }}

@@ -74,7 +74,7 @@ export default function IntroSection() {
       style={{
         height: "1200px",
         backgroundColor: "hsl(0, 0%, 100%)",
-        marginTop: "-2px",
+        marginTop: "-31px",
       }}
     >
       {/* Portrait — Framer: 1244x1552px, absolute, centerX 79%, bottom -180px, z-index 1 */}
@@ -82,9 +82,9 @@ export default function IntroSection() {
         ref={portraitRef}
         className="absolute z-[1]"
         style={{
-          width: "900px",
-          height: "1125px",
-          bottom: "-60px",
+          width: "1244px",
+          height: "1552px",
+          bottom: "-180px",
           left: "79%",
           transform: "translateX(-50%)",
         }}
