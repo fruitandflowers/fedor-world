@@ -96,10 +96,10 @@ export default function NominationCTA() {
         {/* "Every World Counts. Add Yours." — Framer: absolute, top 830px, centerX 35% */}
         <h2
           ref={headingRef}
-          className="text-display text-white text-center absolute"
+          className="text-display text-white absolute"
           style={{
             top: "830px",
-            left: "50%",
+            left: "35%",
             transform: "translateX(-50%)",
             fontSize: "clamp(50px, 6.2vw, 90px)",
             letterSpacing: "-2.6px",
