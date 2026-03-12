@@ -66,7 +66,7 @@ export default function PoliciesSection() {
       ref={sectionRef}
       style={{
         backgroundColor: "rgb(0, 0, 0)",
-        padding: "100px 60px 100px 90px",
+        padding: "100px var(--section-padding-x)",
         overflow: "hidden",
       }}
     >
@@ -133,8 +133,8 @@ export default function PoliciesSection() {
       {/* Policy cards — Framer: 753px wide, gap 21px, vertical stack */}
       <div
         ref={cardsRef}
-        className="mx-auto flex flex-col"
-        style={{ width: "753px", maxWidth: "100%", gap: "21px" }}
+        className="flex flex-col"
+        style={{ width: "753px", maxWidth: "100%", gap: "21px", margin: "0 auto" }}
       >
         {policies.map((policy) => (
           <Link
