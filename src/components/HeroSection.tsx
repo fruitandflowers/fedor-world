@@ -44,10 +44,11 @@ export default function HeroSection() {
         });
       }
 
-      // Layer 2: Portrait moves up faster (parallax factor ~60%) — rises through the text
+      // Layer 2: Portrait — subtle drift, stays BEHIND the earth throughout scroll
+      // Fedor never separates from the planet — he's still doing his work here
       if (portraitRef.current) {
         gsap.to(portraitRef.current, {
-          y: -300,
+          y: -50,
           ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,
