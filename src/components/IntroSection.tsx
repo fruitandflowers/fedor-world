@@ -104,7 +104,7 @@ export default function IntroSection() {
         style={{
           top: "240px",
           left: "89px",
-          fontSize: "clamp(40px, 4.8vw, 69px)",
+          fontSize: "clamp(50px, 5.5vw, 79px)",
           color: "rgb(7, 5, 66)",
           letterSpacing: "-4.83px",
           lineHeight: 0.9,

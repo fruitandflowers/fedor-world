@@ -96,17 +96,19 @@ export default function NominationCTA() {
         {/* "Every World Counts. Add Yours." — Framer: absolute, top 830px, centerX 35% */}
         <h2
           ref={headingRef}
-          className="text-display text-white absolute"
+          className="text-display text-white text-center absolute"
           style={{
             top: "830px",
-            left: "35%",
+            left: "50%",
             transform: "translateX(-50%)",
             fontSize: "clamp(50px, 6.2vw, 90px)",
             letterSpacing: "-2.6px",
             lineHeight: 0.9,
           }}
         >
-          Every World Counts.
+          Every World
+          <br />
+          Counts.
           <br />
           Add Yours.
         </h2>

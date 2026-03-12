@@ -158,9 +158,9 @@ export default function PastLivesCarousel() {
               <p
                 className="text-display"
                 style={{
-                  fontSize: "54px",
-                  color: "#000000",
-                  letterSpacing: "-3.78px",
+                  fontSize: "45px",
+                  color: "rgb(20, 25, 50)",
+                  letterSpacing: "-3.15px",
                   marginTop: "16px",
                 }}
               >

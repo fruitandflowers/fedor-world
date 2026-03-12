@@ -59,7 +59,7 @@ export default function Navigation() {
         <Link
           href="/"
           className="text-display text-white hover:opacity-70"
-          style={{ fontSize: "32px", letterSpacing: "-0.06em", lineHeight: "64px" }}
+          style={{ fontSize: "32px", letterSpacing: "-0.06em", lineHeight: "64px", fontStyle: "italic" }}
         >
           FEDOR
         </Link>

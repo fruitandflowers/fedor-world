@@ -214,7 +214,7 @@ export default function VoteFedorSection() {
             What&apos;s The Big Galactic Idea?
           </h2>
           <p
-            className="mx-auto"
+            className="mx-auto text-center"
             style={{
               fontFamily: "var(--font-accent-stack)",
               fontSize: "var(--text-body-md)",

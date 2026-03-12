@@ -55,8 +55,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${gaqire.variable} ${neueMontreal.variable} ${montserratAlt.variable}`}>
+    <html lang="en" className={`${gaqire.variable} ${neueMontreal.variable} ${montserratAlt.variable}`}>
+      <body>
         <SmoothScroll>
           <Navigation />
           {children}
