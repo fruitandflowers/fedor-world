@@ -46,9 +46,7 @@ export default function Navigation() {
       <nav
         className="ghost-nav fixed top-0 left-0 right-0 z-50 flex items-center justify-between"
         style={{
-          width: "1440px",
-          maxWidth: "100%",
-          margin: "0 auto",
+          width: "100%",
           height: "var(--nav-height)",
           padding: "0 var(--section-padding-x)",
           backgroundColor: scrolled ? "rgba(0, 0, 0, 0.8)" : "transparent",

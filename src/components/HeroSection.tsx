@@ -151,7 +151,7 @@ export default function HeroSection() {
         ref={sandRef}
         className="absolute z-[3]"
         style={{
-          width: "1507px",
+          width: "max(1507px, 100vw)",
           height: "466px",
           bottom: "-31px",
           left: "50%",
