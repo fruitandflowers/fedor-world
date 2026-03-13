@@ -76,7 +76,7 @@ export default function PoliciesSection() {
       <div
         ref={contentRef}
         className="flex items-center justify-center"
-        style={{ minHeight: "clamp(300px, 36.2vw, 521px)" }}
+        style={{ minHeight: "521px" }}
       >
         <div
           className="flex flex-col items-center gap-[13px] text-center"

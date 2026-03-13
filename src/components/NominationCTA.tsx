@@ -69,7 +69,7 @@ export default function NominationCTA() {
       ref={sectionRef}
       className="relative w-full"
       style={{
-        height: "clamp(600px, 65.8vw, 947px)",
+        height: "947px",
         backgroundColor: "hsl(0, 0%, 0%)",
         overflow: "visible",
         zIndex: 1,
@@ -109,7 +109,7 @@ export default function NominationCTA() {
           ref={headingRef}
           className="text-display text-white absolute"
           style={{
-            top: "clamp(500px, 57.6vw, 830px)",
+            top: "830px",
             left: "50%",
             transform: "translateX(-50%)",
             fontSize: "clamp(36px, 6.2vw, 90px)",
@@ -134,7 +134,7 @@ export default function NominationCTA() {
           rel="noopener noreferrer"
           className="absolute inline-flex items-center justify-center text-white no-underline hover:brightness-110"
           style={{
-            top: "clamp(780px, 88.8vw, 1279px)",
+            top: "1279px",
             left: "50%",
             transform: "translateX(-50%)",
             padding: "20px clamp(40px, 6.9vw, 100px)",

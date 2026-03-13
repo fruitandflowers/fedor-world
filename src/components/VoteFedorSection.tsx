@@ -101,7 +101,7 @@ export default function VoteFedorSection() {
     <section
       ref={sectionRef}
       className="relative w-full overflow-hidden"
-      style={{ height: "clamp(600px, 82.2vw, 1183px)" }}
+      style={{ height: "1183px" }}
     >
       {/* Layer 0: Golden sky background — fills entire section */}
       <div className="absolute inset-0">
@@ -156,8 +156,8 @@ export default function VoteFedorSection() {
         ref={fedorRef}
         className="absolute z-[1] pointer-events-none"
         style={{
-          width: "clamp(180px, 20.1vw, 290px)",
-          height: "clamp(346px, 38.8vw, 558px)",
+          width: "290px",
+          height: "558px",
           left: "50%",
           top: "50%",
           transform: "translate(-50%, -50%)",
@@ -176,7 +176,7 @@ export default function VoteFedorSection() {
       <div
         className="absolute z-[3]"
         style={{
-          top: "clamp(150px, 20.8vw, 299px)",
+          top: "299px",
           left: "50%",
           transform: "translateX(-50%)",
         }}
@@ -184,7 +184,7 @@ export default function VoteFedorSection() {
         <p
           className="text-display text-white whitespace-nowrap"
           style={{
-            fontSize: "clamp(24px, 3.1vw, 45px)",
+            fontSize: "40px",
             letterSpacing: "-3.15px",
           }}
         >
@@ -198,13 +198,13 @@ export default function VoteFedorSection() {
         ref={textRef}
         className="absolute left-0 right-0 z-[3] flex flex-col items-center px-6"
         style={{
-          bottom: "clamp(40px, 6.9vw, 100px)",
+          bottom: "100px",
         }}
       >
         <h2
           className="text-display text-white text-center mb-6"
           style={{
-            fontSize: "clamp(24px, 2.8vw, 40px)",
+            fontSize: "40px",
             letterSpacing: "-2.8px",
           }}
         >
@@ -214,7 +214,7 @@ export default function VoteFedorSection() {
           className="text-center"
           style={{
             fontFamily: "var(--font-accent-stack)",
-            fontSize: "clamp(16px, 1.7vw, 24px)",
+            fontSize: "24px",
             color: "rgb(255, 255, 255)",
             letterSpacing: "-0.3px",
             lineHeight: 1.5,

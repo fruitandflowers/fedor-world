@@ -78,7 +78,7 @@ export default function SpotifySection() {
       ref={sectionRef}
       className="relative w-full overflow-visible"
       style={{
-        height: "clamp(900px, 138.9vw, 2000px)",
+        height: "2000px",
         backgroundColor: "hsl(335, 77%, 9%)",
       }}
     >
@@ -87,7 +87,7 @@ export default function SpotifySection() {
         ref={titleRef}
         className="text-display absolute text-center"
         style={{
-          top: "clamp(80px, 11.1vw, 160px)",
+          top: "160px",
           left: "50%",
           transform: "translateX(-50%)",
           fontSize: "clamp(32px, 6.1vw, 88px)",
@@ -107,7 +107,7 @@ export default function SpotifySection() {
         style={{
           width: "740px",
           maxWidth: "90vw",
-          top: "clamp(200px, 31vw, 446px)",
+          top: "446px",
           left: "50%",
           transform: "translateX(-50%)",
         }}
@@ -196,7 +196,7 @@ export default function SpotifySection() {
       {/* Landscape image at bottom — Framer: 1fr x 679px, z-index 1, with floating elements on top */}
       <div
         className="absolute bottom-0 left-0 right-0 z-[1]"
-        style={{ height: "clamp(300px, 47.2vw, 679px)" }}
+        style={{ height: "679px" }}
       >
         <Image
           src="/images/misc/landscape-bottom.png"

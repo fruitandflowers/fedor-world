@@ -72,7 +72,7 @@ export default function IntroSection() {
       ref={sectionRef}
       className="relative w-full overflow-hidden"
       style={{
-        height: "clamp(600px, 83.3vw, 1200px)",
+        height: "1200px",
         backgroundColor: "hsl(0, 0%, 100%)",
         marginTop: "0px",
       }}
@@ -82,10 +82,10 @@ export default function IntroSection() {
         ref={portraitRef}
         className="absolute z-[1]"
         style={{
-          width: "clamp(500px, 86.4vw, 1244px)",
-          height: "clamp(620px, 107.8vw, 1552px)",
-          bottom: "clamp(-180px, -12.5vw, -100px)",
-          left: "clamp(55%, 79%, 79%)",
+          width: "1244px",
+          height: "1552px",
+          bottom: "-180px",
+          left: "79%",
           transform: "translateX(-50%)",
         }}
       >
@@ -103,9 +103,9 @@ export default function IntroSection() {
         ref={headingRef}
         className="text-display absolute z-[1]"
         style={{
-          top: "clamp(100px, 16.7vw, 240px)",
-          left: "clamp(24px, 6.2vw, 89px)",
-          fontSize: "clamp(32px, 5.5vw, 79px)",
+          top: "240px",
+          left: "89px",
+          fontSize: "clamp(50px, 5.5vw, 79px)",
           color: "rgb(7, 5, 66)",
           letterSpacing: "-4.83px",
           lineHeight: 0.9,
