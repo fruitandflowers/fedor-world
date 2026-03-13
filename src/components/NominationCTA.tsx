@@ -4,10 +4,12 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function NominationCTA() {
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const loveyRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -80,12 +82,13 @@ export default function NominationCTA() {
           Hidden on mobile (would be off-screen) */}
       <div
         ref={loveyRef}
-        className="absolute z-[2] hidden md:block"
+        className="absolute z-[2]"
         style={{
-          width: "537px",
-          height: "812px",
-          bottom: "-10px",
-          left: "895.5px",
+          width: isMobile ? "300px" : "537px",
+          height: isMobile ? "454px" : "812px",
+          bottom: isMobile ? "-10px" : "-10px",
+          left: isMobile ? "50%" : "895.5px",
+          transform: isMobile ? "translateX(-50%)" : undefined,
         }}
       >
         <Image

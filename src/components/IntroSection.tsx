@@ -4,10 +4,12 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function IntroSection() {
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const portraitRef = useRef<HTMLDivElement>(null);
@@ -72,7 +74,7 @@ export default function IntroSection() {
       ref={sectionRef}
       className="relative w-full overflow-hidden"
       style={{
-        height: "1200px",
+        height: isMobile ? "1047px" : "1200px",
         backgroundColor: "hsl(0, 0%, 100%)",
         marginTop: "0px",
       }}
@@ -82,10 +84,10 @@ export default function IntroSection() {
         ref={portraitRef}
         className="absolute z-[1]"
         style={{
-          width: "1244px",
-          height: "1552px",
-          bottom: "-180px",
-          left: "79%",
+          width: isMobile ? "572px" : "1244px",
+          height: isMobile ? "714px" : "1552px",
+          bottom: isMobile ? "-80px" : "-180px",
+          left: isMobile ? "60%" : "79%",
           transform: "translateX(-50%)",
         }}
       >
@@ -103,9 +105,9 @@ export default function IntroSection() {
         ref={headingRef}
         className="text-display absolute z-[1]"
         style={{
-          top: "240px",
-          left: "89px",
-          fontSize: "clamp(50px, 5.5vw, 79px)",
+          top: isMobile ? "60px" : "240px",
+          left: isMobile ? "24px" : "89px",
+          fontSize: "var(--text-display-lg)",
           color: "rgb(7, 5, 66)",
           letterSpacing: "-4.83px",
           lineHeight: 0.9,

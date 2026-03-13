@@ -60,6 +60,15 @@
   --transition-slow: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+/* === MOBILE OVERRIDES (extracted from Framer at 393px) === */
+@media (max-width: 768px) {
+  :root {
+    --text-hero: 60px;           /* Framer: 60px (vs desktop 172px) */
+    --text-display-lg: 69px;     /* Framer: 69px for intro heading */
+    --text-display-xl: 51px;     /* Framer: 51px for "Policies and Worlds" */
+  }
+}
+
 @theme inline {
   --color-background: var(--color-black);
   --color-foreground: var(--color-white);

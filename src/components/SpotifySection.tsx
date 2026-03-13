@@ -4,10 +4,12 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function SpotifySection() {
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const embedRef = useRef<HTMLDivElement>(null);
@@ -78,7 +80,7 @@ export default function SpotifySection() {
       ref={sectionRef}
       className="relative w-full overflow-visible"
       style={{
-        height: "2000px",
+        height: isMobile ? "1533px" : "2000px",
         backgroundColor: "hsl(335, 77%, 9%)",
       }}
     >

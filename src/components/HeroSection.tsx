@@ -4,10 +4,12 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function HeroSection() {
+  const isMobile = useIsMobile();
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const portraitRef = useRef<HTMLDivElement>(null);
@@ -82,7 +84,7 @@ export default function HeroSection() {
       ref={sectionRef}
       className="relative w-full"
       style={{
-        height: "1400px",
+        height: isMobile ? "914px" : "1400px",
         background: "var(--gradient-hero-bg)",
         overflow: "hidden",
       }}
