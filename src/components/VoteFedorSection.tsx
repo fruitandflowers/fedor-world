@@ -116,9 +116,10 @@ export default function VoteFedorSection() {
       </div>
 
       {/* Layer 1: Right rock wall — Framer: 2123px wide, right: -1446px, z-index 2 */}
+      {/* Hidden on mobile — at 393px the wall covers the entire viewport */}
       <div
         ref={rightRockRef}
-        className="absolute top-0 bottom-0 z-[2] pointer-events-none"
+        className="absolute top-0 bottom-0 z-[2] pointer-events-none hidden md:block"
         style={{
           width: "2123px",
           right: "-1446px",
@@ -134,9 +135,10 @@ export default function VoteFedorSection() {
       </div>
 
       {/* Layer 2: Left rock wall — Framer: 2478px wide, left: -1642px, z-index 2 */}
+      {/* Hidden on mobile — covers entire viewport at narrow widths */}
       <div
         ref={leftRockRef}
-        className="absolute top-0 bottom-0 z-[2] pointer-events-none"
+        className="absolute top-0 bottom-0 z-[2] pointer-events-none hidden md:block"
         style={{
           width: "2478px",
           left: "-1642px",
