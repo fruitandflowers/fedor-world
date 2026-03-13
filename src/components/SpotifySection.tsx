@@ -16,19 +16,19 @@ export default function SpotifySection() {
     const ctx = gsap.context(() => {
       if (!sectionRef.current) return;
 
+      // Title flies up from below the Spotify player
       if (titleRef.current) {
         gsap.fromTo(
           titleRef.current,
-          { opacity: 0, y: 40 },
+          { y: 200 },
           {
-            opacity: 1,
             y: 0,
-            duration: 0.8,
-            ease: "power3.out",
+            ease: "none",
             scrollTrigger: {
               trigger: sectionRef.current,
-              start: "top 70%",
-              toggleActions: "play none none none",
+              start: "top 80%",
+              end: "top 20%",
+              scrub: true,
             },
           }
         );
@@ -52,6 +52,22 @@ export default function SpotifySection() {
           }
         );
       }
+
+      // Floating petals — drift and rotate slightly on scroll
+      const petals = sectionRef.current.querySelectorAll(".floating-petal");
+      petals.forEach((petal, i) => {
+        gsap.to(petal, {
+          y: -30 + i * 15,
+          rotation: `+=${10 + i * 8}`,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "center bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -62,25 +78,26 @@ export default function SpotifySection() {
       ref={sectionRef}
       className="relative w-full overflow-visible"
       style={{
-        height: "2000px",
+        height: "clamp(900px, 138.9vw, 2000px)",
         backgroundColor: "hsl(335, 77%, 9%)",
       }}
     >
-      {/* "Presidential radio station" title — Framer: absolute, top 23px, centerX 50% */}
+      {/* "Presidential radio station" title — Original: 88px GAQIRE, dusty rose, centered */}
       <h2
         ref={titleRef}
-        className="text-accent absolute text-center"
+        className="text-display absolute text-center"
         style={{
-          top: "40px",
+          top: "clamp(80px, 11.1vw, 160px)",
           left: "50%",
           transform: "translateX(-50%)",
-          fontSize: "14px",
-          color: "rgba(255, 255, 255, 0.6)",
-          letterSpacing: "0.1em",
+          fontSize: "clamp(32px, 6.1vw, 88px)",
+          color: "var(--color-hero-text)",
+          letterSpacing: "-6.16px",
           whiteSpace: "nowrap",
+          textTransform: "capitalize",
         }}
       >
-        PRESIDENTIAL RADIO STATION
+        Presidential radio station
       </h2>
 
       {/* Spotify embed — Framer: 740x477px frame, absolute, top 446px, centerX 50%, z-index 8 */}
@@ -90,7 +107,7 @@ export default function SpotifySection() {
         style={{
           width: "740px",
           maxWidth: "90vw",
-          top: "446px",
+          top: "clamp(200px, 31vw, 446px)",
           left: "50%",
           transform: "translateX(-50%)",
         }}
@@ -107,9 +124,9 @@ export default function SpotifySection() {
         />
       </div>
 
-      {/* Floating gem — Framer: 102x99px, centerX 51%, centerY 50%, z-index 1 */}
+      {/* Floating gem — hidden on mobile */}
       <div
-        className="absolute z-[1] pointer-events-none"
+        className="absolute z-[1] pointer-events-none hidden md:block"
         style={{
           width: "102px",
           height: "99px",
@@ -121,9 +138,9 @@ export default function SpotifySection() {
         <Image src="/images/misc/floating-gem-1.png" alt="" fill className="object-contain" sizes="102px" />
       </div>
 
-      {/* Floating bottle — Framer: 89x151px, rotation -42, left 592px, centerY 51%, z-index 0 */}
+      {/* Floating bottle — hidden on mobile */}
       <div
-        className="absolute z-0 pointer-events-none"
+        className="absolute z-0 pointer-events-none hidden md:block"
         style={{
           width: "89px",
           height: "151px",
@@ -135,9 +152,9 @@ export default function SpotifySection() {
         <Image src="/images/misc/floating-bottle.png" alt="" fill className="object-contain" sizes="89px" />
       </div>
 
-      {/* Floating logo — Framer: 175x87px, bottom 815px, left 899px, z-index 1 */}
+      {/* Floating logo — hidden on mobile */}
       <div
-        className="absolute z-[1] pointer-events-none"
+        className="absolute z-[1] pointer-events-none hidden md:block"
         style={{
           width: "175px",
           height: "87px",
@@ -148,9 +165,9 @@ export default function SpotifySection() {
         <Image src="/images/misc/floating-logo.png" alt="" fill className="object-contain" sizes="175px" />
       </div>
 
-      {/* Stone — Framer: 349x382px, rotation -17, right -671px, centerY 45%, z-index 1 */}
+      {/* Stone — hidden on mobile (off-screen anyway at right: -671px) */}
       <div
-        className="absolute z-[1] pointer-events-none"
+        className="absolute z-[1] pointer-events-none hidden md:block"
         style={{
           width: "349px",
           height: "382px",
@@ -162,9 +179,9 @@ export default function SpotifySection() {
         <Image src="/images/misc/floating-stone.png" alt="" fill className="object-contain" sizes="349px" />
       </div>
 
-      {/* Small gem rotated — Framer: 58x57px, rotation 308, top 869px, left 853px, z-index 1 */}
+      {/* Small gem rotated — hidden on mobile */}
       <div
-        className="absolute z-[1] pointer-events-none"
+        className="absolute z-[1] pointer-events-none hidden md:block"
         style={{
           width: "58px",
           height: "57px",
@@ -179,7 +196,7 @@ export default function SpotifySection() {
       {/* Landscape image at bottom — Framer: 1fr x 679px, z-index 1, with floating elements on top */}
       <div
         className="absolute bottom-0 left-0 right-0 z-[1]"
-        style={{ height: "679px" }}
+        style={{ height: "clamp(300px, 47.2vw, 679px)" }}
       >
         <Image
           src="/images/misc/landscape-bottom.png"
@@ -189,9 +206,10 @@ export default function SpotifySection() {
           sizes="100vw"
         />
 
+        {/* Floating petals — hidden on mobile */}
         {/* Floating petal 1 — Framer: 148x307px, rotation 35, top -280px, left 734px, z-index -1 */}
         <div
-          className="absolute pointer-events-none"
+          className="absolute pointer-events-none floating-petal hidden md:block"
           style={{
             width: "148px",
             height: "307px",
@@ -206,7 +224,7 @@ export default function SpotifySection() {
 
         {/* Floating petal 2 — Framer: 107x142px, top -44px, centerX 49%, z-index -1 */}
         <div
-          className="absolute pointer-events-none"
+          className="absolute pointer-events-none floating-petal hidden md:block"
           style={{
             width: "107px",
             height: "142px",
@@ -221,7 +239,7 @@ export default function SpotifySection() {
 
         {/* Floating petal 3 — Framer: 176x124px, top 0px, left 478px, z-index -1 */}
         <div
-          className="absolute pointer-events-none"
+          className="absolute pointer-events-none floating-petal hidden md:block"
           style={{
             width: "176px",
             height: "124px",
@@ -235,7 +253,7 @@ export default function SpotifySection() {
 
         {/* Floating petal 4 — Framer: 91x160px, rotation -45, top -90px, left 804px, z-index -1 */}
         <div
-          className="absolute pointer-events-none"
+          className="absolute pointer-events-none floating-petal hidden md:block"
           style={{
             width: "91px",
             height: "160px",

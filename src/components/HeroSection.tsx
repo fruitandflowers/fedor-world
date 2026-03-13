@@ -82,7 +82,7 @@ export default function HeroSection() {
       ref={sectionRef}
       className="relative w-full"
       style={{
-        height: "1400px",
+        height: "clamp(700px, 97.2vw, 1400px)",
         background: "var(--gradient-hero-bg)",
         overflow: "hidden",
       }}
@@ -121,9 +121,9 @@ export default function HeroSection() {
         ref={portraitRef}
         className="absolute z-[2] overflow-visible"
         style={{
-          width: "276px",
-          height: "461px",
-          bottom: "290px",
+          width: "clamp(180px, 19.2vw, 276px)",
+          height: "clamp(300px, 32vw, 461px)",
+          bottom: "clamp(160px, 20.1vw, 290px)",
           left: "50%",
           transform: "translateX(-50%)",
         }}
@@ -131,10 +131,10 @@ export default function HeroSection() {
         <div
           className="absolute"
           style={{
-            width: "529px",
-            height: "1017px",
-            top: "-336.5px",
-            left: "-127.5px",
+            width: "clamp(340px, 36.7vw, 529px)",
+            height: "clamp(660px, 70.6vw, 1017px)",
+            top: "clamp(-336.5px, -23.4vw, -220px)",
+            left: "clamp(-127.5px, -8.9vw, -80px)",
           }}
         >
           <Image
@@ -154,7 +154,7 @@ export default function HeroSection() {
         className="absolute z-[3]"
         style={{
           width: "max(1507px, 100vw)",
-          height: "466px",
+          height: "clamp(260px, 32.4vw, 466px)",
           bottom: "0px",
           left: "50%",
           transform: "translateX(-50%)",

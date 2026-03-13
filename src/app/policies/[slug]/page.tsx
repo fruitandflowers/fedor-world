@@ -23,50 +23,62 @@ export default async function PolicyPage({
 
   return (
     <main
-      className="min-h-screen"
+      className="min-h-screen relative"
       style={{ background: "#000000" }}
     >
-      {/* Hero image */}
-      <div className="relative w-full" style={{ height: "clamp(300px, 50vw, 600px)" }}>
-        <Image
-          src={policy.image}
-          alt={policy.title}
-          fill
-          className="object-cover"
-        />
-        <div
-          className="absolute inset-0"
+      {/* Full background image */}
+      <Image
+        src="/images/policies/hero-bg.jpg"
+        alt=""
+        fill
+        className="object-cover opacity-40"
+      />
+
+      {/* Back button — matching Framer's "← Policies" overlay */}
+      <div className="relative z-10" style={{ padding: "24px" }}>
+        <Link
+          href="/policies"
+          className="inline-flex items-center gap-2 no-underline"
           style={{
-            background: "linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.95) 100%)",
+            fontFamily: "var(--font-body-stack)",
+            fontSize: "16px",
+            fontWeight: 400,
+            color: "rgba(255, 255, 255, 0.8)",
+            background: "rgba(255, 255, 255, 0.1)",
+            backdropFilter: "blur(10px)",
+            padding: "10px 20px",
+            borderRadius: "20px",
+            border: "1px solid rgba(255, 255, 255, 0.15)",
+            transition: "background 0.3s ease",
           }}
-        />
+        >
+          ← Policies
+        </Link>
       </div>
 
       {/* Content */}
       <div
-        className="max-w-3xl mx-auto"
+        className="relative z-10 flex flex-col items-center justify-center text-center"
         style={{
+          minHeight: "calc(100vh - 100px)",
           padding: "0 var(--section-padding-x) var(--section-padding-y)",
-          marginTop: "-80px",
-          position: "relative",
-          zIndex: 10,
         }}
       >
-        <Link
-          href="/"
-          className="text-accent link-reveal inline-block mb-12"
-          style={{
-            color: "var(--color-text-muted)",
-          }}
-        >
-          &larr; Back to Home
-        </Link>
+        <div className="relative w-[200px] h-[200px] rounded-[30px] overflow-hidden mb-10">
+          <Image
+            src={policy.image}
+            alt={policy.title}
+            fill
+            className="object-cover"
+          />
+        </div>
 
         <h1
           className="text-display mb-6"
           style={{
-            fontSize: "var(--text-display-md)",
+            fontSize: "clamp(28px, 4vw, 54px)",
             color: "var(--color-hero-text)",
+            maxWidth: "800px",
           }}
         >
           {policy.title}
@@ -76,19 +88,22 @@ export default async function PolicyPage({
           style={{
             fontFamily: "var(--font-body-stack)",
             fontSize: "var(--text-body-lg)",
-            color: "var(--color-text-muted)",
+            color: "rgba(255, 255, 255, 0.6)",
             lineHeight: 1.6,
-            letterSpacing: "-0.3px",
+            maxWidth: "600px",
           }}
         >
           {policy.description}
         </p>
 
         <p
-          className="text-accent mt-16"
-          style={{ color: "var(--color-text-subtle)" }}
+          className="text-accent mt-12"
+          style={{
+            color: "rgba(255, 255, 255, 0.3)",
+            fontSize: "var(--text-caption)",
+          }}
         >
-          Full policy content coming soon.
+          Full policy document coming soon
         </p>
       </div>
     </main>

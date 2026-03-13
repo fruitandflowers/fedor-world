@@ -101,7 +101,7 @@ export default function VoteFedorSection() {
     <section
       ref={sectionRef}
       className="relative w-full overflow-hidden"
-      style={{ height: "1183px" }}
+      style={{ height: "clamp(600px, 82.2vw, 1183px)" }}
     >
       {/* Layer 0: Golden sky background — fills entire section */}
       <div className="absolute inset-0">
@@ -156,8 +156,8 @@ export default function VoteFedorSection() {
         ref={fedorRef}
         className="absolute z-[1] pointer-events-none"
         style={{
-          width: "290px",
-          height: "558px",
+          width: "clamp(180px, 20.1vw, 290px)",
+          height: "clamp(346px, 38.8vw, 558px)",
           left: "50%",
           top: "50%",
           transform: "translate(-50%, -50%)",
@@ -176,7 +176,7 @@ export default function VoteFedorSection() {
       <div
         className="absolute z-[3]"
         style={{
-          top: "299px",
+          top: "clamp(150px, 20.8vw, 299px)",
           left: "50%",
           transform: "translateX(-50%)",
         }}
@@ -184,7 +184,7 @@ export default function VoteFedorSection() {
         <p
           className="text-display text-white whitespace-nowrap"
           style={{
-            fontSize: "45px",
+            fontSize: "clamp(24px, 3.1vw, 45px)",
             letterSpacing: "-3.15px",
           }}
         >
@@ -193,42 +193,38 @@ export default function VoteFedorSection() {
       </div>
 
       {/* Layer 5: Bottom text area — "What's the Big Galactic Idea?" */}
+      {/* Original: centered at ~75% down section, 40px GAQIRE title, 24px Montserrat body */}
       <div
         ref={textRef}
-        className="absolute bottom-0 left-0 right-0 z-[3]"
+        className="absolute left-0 right-0 z-[3] flex flex-col items-center px-6"
         style={{
-          background:
-            "linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.7) 50%, transparent 100%)",
-          paddingBottom: "134px",
-          paddingTop: "200px",
+          bottom: "clamp(40px, 6.9vw, 100px)",
         }}
       >
-        <div className="text-center">
-          <h2
-            className="text-display text-white mb-8"
-            style={{
-              fontSize: "40px",
-              letterSpacing: "-2.8px",
-            }}
-          >
-            What&apos;s The Big Galactic Idea?
-          </h2>
-          <p
-            className="mx-auto text-center"
-            style={{
-              fontFamily: "var(--font-accent-stack)",
-              fontSize: "var(--text-body-md)",
-              color: "var(--color-text-muted)",
-              letterSpacing: "-0.3px",
-              lineHeight: 1.6,
-              maxWidth: "561px",
-            }}
-          >
-            You can invite me to lead transformation in your world. Together, our
-            worlds weave into a planetary movement of abundance,
-            interconnectedness, and universal compassion.
-          </p>
-        </div>
+        <h2
+          className="text-display text-white text-center mb-6"
+          style={{
+            fontSize: "clamp(24px, 2.8vw, 40px)",
+            letterSpacing: "-2.8px",
+          }}
+        >
+          What&apos;s The Big Galactic Idea?
+        </h2>
+        <p
+          className="text-center"
+          style={{
+            fontFamily: "var(--font-accent-stack)",
+            fontSize: "clamp(16px, 1.7vw, 24px)",
+            color: "rgb(255, 255, 255)",
+            letterSpacing: "-0.3px",
+            lineHeight: 1.5,
+            maxWidth: "min(561px, 90vw)",
+          }}
+        >
+          You can invite me to lead transformation in your world. Together, our
+          worlds weave into a planetary movement of abundance,
+          interconnectedness, and universal compassion.
+        </p>
       </div>
     </section>
   );

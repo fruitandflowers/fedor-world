@@ -62,10 +62,68 @@ export default function Navigation() {
           FEDOR
         </Link>
 
-        {/* Hamburger — visible on all viewports (original design is minimal: logo + hamburger) */}
+        {/* Desktop links — horizontal nav matching original Framer */}
+        <div className="hidden md:flex items-center gap-6">
+          {desktopLinks.map((link) =>
+            link.external ? (
+              <a
+                key={link.label}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: "var(--font-body-stack)",
+                  fontSize: "14px",
+                  color: "rgba(255, 255, 255, 0.7)",
+                  textDecoration: "none",
+                }}
+                className="hover:opacity-100 transition-opacity"
+              >
+                {link.label}
+              </a>
+            ) : (
+              <Link
+                key={link.label}
+                href={link.href}
+                style={{
+                  fontFamily: "var(--font-body-stack)",
+                  fontSize: "14px",
+                  color: "rgba(255, 255, 255, 0.7)",
+                  textDecoration: "none",
+                }}
+                className="hover:opacity-100 transition-opacity"
+              >
+                {link.label}
+              </Link>
+            )
+          )}
+
+          {/* "Nominate Your World" CTA button — outlined style matching original */}
+          <a
+            href="https://form.typeform.com/to/y2NrRDGp"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontFamily: "var(--font-body-stack)",
+              fontSize: "14px",
+              fontWeight: 500,
+              color: "rgb(171, 19, 87)",
+              backgroundColor: "transparent",
+              padding: "8px 20px",
+              borderRadius: "8px",
+              textDecoration: "none",
+              border: "1px solid rgba(171, 19, 87, 0.5)",
+            }}
+            className="hover:border-[rgb(171,19,87)] transition-colors"
+          >
+            Nominate Your World
+          </a>
+        </div>
+
+        {/* Hamburger — mobile only */}
         <button
           onClick={() => setMenuOpen(true)}
-          className="p-2 cursor-pointer"
+          className="p-2 cursor-pointer md:hidden"
           aria-label="Open menu"
           style={{ background: "none", border: "none" }}
         >

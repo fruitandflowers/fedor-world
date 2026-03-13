@@ -39,22 +39,24 @@ export default function PoliciesSection() {
 
       if (cardsRef.current) {
         const cards = cardsRef.current.querySelectorAll(".policy-card");
-        gsap.fromTo(
-          cards,
-          { opacity: 0, x: -40 },
-          {
-            opacity: 1,
-            x: 0,
-            duration: 0.5,
-            stagger: 0.08,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: cardsRef.current,
-              start: "top 85%",
-              toggleActions: "play none none none",
-            },
-          }
-        );
+        // Cards emerge from left offset into center as you scroll — scrub-linked
+        cards.forEach((card, i) => {
+          gsap.fromTo(
+            card,
+            { opacity: 0, x: -60 - i * 5 },
+            {
+              opacity: 1,
+              x: 0,
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 95%",
+                end: "top 60%",
+                scrub: true,
+              },
+            }
+          );
+        });
       }
     }, sectionRef);
 
@@ -74,7 +76,7 @@ export default function PoliciesSection() {
       <div
         ref={contentRef}
         className="flex items-center justify-center"
-        style={{ height: "521px" }}
+        style={{ minHeight: "clamp(300px, 36.2vw, 521px)" }}
       >
         <div
           className="flex flex-col items-center gap-[13px] text-center"
@@ -97,7 +99,7 @@ export default function PoliciesSection() {
           <p
             style={{
               fontFamily: "var(--font-body-stack)",
-              fontSize: "24px",
+              fontSize: "clamp(16px, 1.7vw, 24px)",
               fontWeight: 400,
               color: "var(--color-text-muted)",
               letterSpacing: "-0.5px",
@@ -112,12 +114,13 @@ export default function PoliciesSection() {
               href="/policies"
               className="inline-flex items-center gap-3 text-white no-underline hover:brightness-110"
               style={{
-                padding: "40px 25px",
-                height: "40px",
-                background: "rgb(171, 19, 87)",
+                padding: "clamp(14px, 1.4vw, 20px) clamp(24px, 2.8vw, 40px)",
+                height: "auto",
+                minHeight: "clamp(56px, 5.6vw, 80px)",
+                background: "linear-gradient(135deg, rgb(255, 36, 186) 0%, rgb(171, 19, 87) 100%)",
                 borderRadius: "20px",
                 fontFamily: "var(--font-body-stack)",
-                fontSize: "34px",
+                fontSize: "clamp(16px, 1.7vw, 24px)",
                 fontWeight: 700,
               }}
             >
@@ -142,9 +145,9 @@ export default function PoliciesSection() {
             href={`/policies/${policy.slug}`}
             className="policy-card flex items-center no-underline group"
             style={{
-              gap: "40px",
-              padding: "15px",
-              borderRadius: "42px",
+              gap: "clamp(16px, 2.8vw, 40px)",
+              padding: "clamp(10px, 1vw, 15px)",
+              borderRadius: "clamp(24px, 2.9vw, 42px)",
               background: "var(--gradient-cta-btn)",
               flexWrap: "wrap",
             }}
@@ -153,9 +156,9 @@ export default function PoliciesSection() {
             <div
               className="relative flex-shrink-0 overflow-hidden"
               style={{
-                width: "150px",
-                height: "150px",
-                borderRadius: "30px",
+                width: "clamp(80px, 10.4vw, 150px)",
+                height: "clamp(80px, 10.4vw, 150px)",
+                borderRadius: "clamp(16px, 2.1vw, 30px)",
               }}
             >
               <Image
@@ -172,12 +175,12 @@ export default function PoliciesSection() {
               className="flex-1"
               style={{
                 fontFamily: "var(--font-body-stack)",
-                fontSize: "23px",
+                fontSize: "clamp(16px, 1.6vw, 23px)",
                 fontWeight: 400,
                 color: "#ffffff",
                 letterSpacing: "-0.5px",
                 lineHeight: 1.4,
-                minWidth: "200px",
+                minWidth: "120px",
               }}
             >
               {policy.title}

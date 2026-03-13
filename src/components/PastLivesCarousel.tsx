@@ -4,39 +4,70 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Image from "next/image";
 import { pastLives } from "@/data/past-lives";
 
+function useIsMobile(breakpoint = 768) {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setIsMobile(mql.matches);
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function PastLivesCarousel() {
   const itemCount = pastLives.length;
-  const visibleCount = 3;
-  const gap = 32;
+  const isMobile = useIsMobile();
+  const visibleCount = isMobile ? 1 : 3;
+  const gap = isMobile ? 16 : 32;
 
-  // Start in the middle copy for seamless looping
-  const [current, setCurrent] = useState(itemCount + 2);
+  // Paginated carousel — current is the index of the leftmost visible item
+  const [current, setCurrent] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isTransitioning, setIsTransitioning] = useState(true);
-  const dragStartX = useRef(0);
-  const dragCurrentX = useRef(0);
 
-  // Triple the items for infinite loop: [...items, ...items, ...items]
+  // Tripled items for infinite seamless loop
   const tripled = [...pastLives, ...pastLives, ...pastLives];
+  const [offset, setOffset] = useState(itemCount); // Start in middle copy
+  const [isTransitioning, setIsTransitioning] = useState(true);
 
-  // When we reach the edges of the tripled array, silently jump to the middle copy
+  const goNext = useCallback(() => {
+    setIsTransitioning(true);
+    setOffset((prev) => prev + 1);
+    setCurrent((prev) => (prev + 1) % itemCount);
+  }, [itemCount]);
+
+  const goPrev = useCallback(() => {
+    setIsTransitioning(true);
+    setOffset((prev) => prev - 1);
+    setCurrent((prev) => (prev - 1 + itemCount) % itemCount);
+  }, [itemCount]);
+
+  const goToPage = useCallback(
+    (page: number) => {
+      const diff = page - current;
+      setIsTransitioning(true);
+      setOffset((prev) => prev + diff);
+      setCurrent(page);
+    },
+    [current]
+  );
+
+  // Silent jump when reaching edges of tripled array
   useEffect(() => {
     if (!isTransitioning) return;
     const timer = setTimeout(() => {
-      // If we've scrolled past the middle copy, jump back
-      if (current >= itemCount * 2) {
+      if (offset >= itemCount * 2) {
         setIsTransitioning(false);
-        setCurrent(current - itemCount);
-      } else if (current < itemCount) {
+        setOffset((prev) => prev - itemCount);
+      } else if (offset < itemCount) {
         setIsTransitioning(false);
-        setCurrent(current + itemCount);
+        setOffset((prev) => prev + itemCount);
       }
-    }, 600); // Match transition duration
+    }, 600);
     return () => clearTimeout(timer);
-  }, [current, itemCount, isTransitioning]);
+  }, [offset, itemCount, isTransitioning]);
 
   // Re-enable transition after silent jump
   useEffect(() => {
@@ -51,58 +82,44 @@ export default function PastLivesCarousel() {
 
   // Auto-play every 2.3s
   useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setCurrent((prev) => prev + 1);
-    }, 2300);
+    intervalRef.current = setInterval(goNext, 2300);
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, []);
+  }, [goNext]);
 
-  // Drag support
-  const handleDragStart = useCallback((clientX: number) => {
-    setIsDragging(true);
-    dragStartX.current = clientX;
-    dragCurrentX.current = clientX;
+  // Reset autoplay on manual interaction
+  const resetAutoplay = useCallback(() => {
     if (intervalRef.current) clearInterval(intervalRef.current);
-  }, []);
+    intervalRef.current = setInterval(goNext, 2300);
+  }, [goNext]);
 
-  const handleDragMove = useCallback((clientX: number) => {
-    if (!isDragging) return;
-    dragCurrentX.current = clientX;
-  }, [isDragging]);
-
-  const handleDragEnd = useCallback(() => {
-    if (!isDragging) return;
-    setIsDragging(false);
-    const diff = dragStartX.current - dragCurrentX.current;
-    if (Math.abs(diff) > 50) {
-      setCurrent((prev) => diff > 0 ? prev + 1 : prev - 1);
-    }
-    // Restart autoplay
-    intervalRef.current = setInterval(() => {
-      setCurrent((prev) => prev + 1);
-    }, 2300);
-  }, [isDragging]);
-
-  const itemWidthCalc = `calc((100% - ${gap * (visibleCount - 1)}px) / ${visibleCount})`;
-  const slideOffset = `calc(${current} * (calc((100% - ${gap * (visibleCount - 1)}px) / ${visibleCount}) + ${gap}px))`;
+  const gapCount = visibleCount - 1;
+  const itemWidthCalc = `calc((100% - ${gap * gapCount}px) / ${visibleCount})`;
+  const slideOffset = `calc(${offset} * (calc((100% - ${gap * gapCount}px) / ${visibleCount}) + ${gap}px))`;
 
   return (
     <section
       ref={sectionRef}
       className="relative w-full overflow-hidden"
       style={{
-        height: "1273px",
+        minHeight: isMobile ? "auto" : "1273px",
+        height: isMobile ? "auto" : "1273px",
         backgroundColor: "#ffffff",
+        paddingBottom: isMobile ? "60px" : undefined,
       }}
     >
-      {/* Title — overlaid at top, absolute positioned */}
+      {/* Title — centered at top */}
       <h2
-        className="text-display absolute left-1/2 -translate-x-1/2 text-center z-[1] whitespace-nowrap"
+        className="text-display text-center z-[1] whitespace-nowrap"
         style={{
-          top: "251px",
-          fontSize: "clamp(40px, 5.6vw, 80px)",
+          paddingTop: isMobile ? "80px" : "251px",
+          paddingBottom: isMobile ? "40px" : undefined,
+          position: isMobile ? "relative" : "absolute",
+          left: isMobile ? "auto" : "50%",
+          top: isMobile ? "auto" : "251px",
+          transform: isMobile ? "none" : "translateX(-50%)",
+          fontSize: "clamp(32px, 5.6vw, 80px)",
           color: "rgb(20, 25, 50)",
           letterSpacing: "-5.6px",
           lineHeight: 0.9,
@@ -113,31 +130,24 @@ export default function PastLivesCarousel() {
         FUTURE PRESIDENT
       </h2>
 
-      {/* Spacer */}
-      <div style={{ height: "442px" }} />
+      {/* Spacer — only needed in absolute layout */}
+      {!isMobile && <div style={{ height: "442px" }} />}
 
-      {/* Slideshow — 800px height, 3 items, gap 32, auto-play, INFINITE LOOP */}
+      {/* Slideshow */}
       <div
         className="relative overflow-hidden"
-        style={{ height: "800px" }}
-        onMouseDown={(e) => handleDragStart(e.clientX)}
-        onMouseMove={(e) => handleDragMove(e.clientX)}
-        onMouseUp={handleDragEnd}
-        onMouseLeave={handleDragEnd}
-        onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
-        onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
-        onTouchEnd={handleDragEnd}
+        style={{ height: isMobile ? "clamp(400px, 80vw, 600px)" : "800px" }}
       >
+        {/* Track */}
         <div
-          ref={trackRef}
           className="flex h-full"
           style={{
             gap: `${gap}px`,
             transform: `translateX(calc(-1 * ${slideOffset}))`,
-            transition: isTransitioning && !isDragging
-              ? "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
-              : "none",
-            cursor: isDragging ? "grabbing" : "grab",
+            transition:
+              isTransitioning
+                ? "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)"
+                : "none",
           }}
         >
           {tripled.map((life, i) => (
@@ -152,15 +162,15 @@ export default function PastLivesCarousel() {
                   alt={`Fedor ${life.year} — ${life.label}`}
                   fill
                   className="object-cover"
-                  sizes="(max-width: 640px) 100vw, 33vw"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
               </div>
               <p
                 className="text-display"
                 style={{
-                  fontSize: "45px",
-                  color: "rgb(20, 25, 50)",
-                  letterSpacing: "-3.15px",
+                  fontSize: isMobile ? "32px" : "54px",
+                  color: "rgb(0, 0, 0)",
+                  letterSpacing: "-3.78px",
                   marginTop: "16px",
                 }}
               >
@@ -169,6 +179,95 @@ export default function PastLivesCarousel() {
             </div>
           ))}
         </div>
+
+        {/* Prev/Next arrows — overlaid on carousel edges */}
+        <button
+          onClick={() => {
+            goPrev();
+            resetAutoplay();
+          }}
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-[2] flex items-center justify-center"
+          style={{
+            width: "48px",
+            height: "48px",
+            borderRadius: "50%",
+            background: "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(4px)",
+            border: "none",
+            cursor: "pointer",
+          }}
+          aria-label="Previous"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="rgb(20, 25, 50)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
+        </button>
+        <button
+          onClick={() => {
+            goNext();
+            resetAutoplay();
+          }}
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-[2] flex items-center justify-center"
+          style={{
+            width: "48px",
+            height: "48px",
+            borderRadius: "50%",
+            background: "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(4px)",
+            border: "none",
+            cursor: "pointer",
+          }}
+          aria-label="Next"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="rgb(20, 25, 50)"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Pagination dots */}
+      <div className="flex justify-center items-center gap-3 mt-6">
+        {pastLives.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => {
+              goToPage(i);
+              resetAutoplay();
+            }}
+            aria-label={`Scroll to page ${i + 1}`}
+            style={{
+              width: current === i ? "10px" : "8px",
+              height: current === i ? "10px" : "8px",
+              borderRadius: "50%",
+              background:
+                current === i
+                  ? "rgb(20, 25, 50)"
+                  : "rgba(20, 25, 50, 0.25)",
+              border: "none",
+              cursor: "pointer",
+              transition: "all 0.3s ease",
+              padding: 0,
+            }}
+          />
+        ))}
       </div>
     </section>
   );
