@@ -35,8 +35,8 @@ export default function NominationCTA() {
         );
       }
 
-      // Heading + button scroll up with parallax (1.875x speed over 400px)
-      // Heading passes through "above Fedor's head" ~70% in, button arrives at nav level at end
+      // Heading + button: fast parallax over short range
+      // At animation end: heading off screen, button at chin level, Fedor's face visible
       const parallaxTargets = [headingRef.current, buttonRef.current].filter(Boolean);
       parallaxTargets.forEach((el) => {
         gsap.fromTo(
@@ -48,7 +48,7 @@ export default function NominationCTA() {
             scrollTrigger: {
               trigger: sectionRef.current,
               start: "top top",
-              end: "+=400",
+              end: "+=250",
               scrub: true,
             },
           }
